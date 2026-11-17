@@ -1,0 +1,11 @@
+# Per-user pairing with Pureplay - never commit
+token.json
+# Downloaded by setup.bat
+models/
+__pycache__/
+*.pyc
+# Local test scripts and logs
+*_log.txt
+tiger_*test.bat
+tiger_check.bat
+tiger_voices.bat

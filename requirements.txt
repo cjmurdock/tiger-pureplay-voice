@@ -1,0 +1,4 @@
+vosk>=0.3.45
+sounddevice>=0.4.6
+websockets>=13.0
+pywin32>=306; sys_platform == "win32"

@@ -1,0 +1,82 @@
+{
+  "wake_word": "tiger",
+  "pureplay": {
+    "host": "127.0.0.1",
+    "port": 9770,
+    "client_name": "Tiger Voice Control"
+  },
+  "mic": {
+    "device": null,
+    "sample_rate": 16000
+  },
+  "vosk_model": "models/vosk-model-small-en-us-0.15",
+  "min_confidence": 0.55,
+  "units": "yards",
+  "voice": {
+    "enabled": true,
+    "name": null,
+    "rate": 190,
+    "volume": 1.0,
+    "confirm_hotkeys": "beep"
+  },
+  "announce": {
+    "your_turn": true,
+    "distance_on_turn": true,
+    "shot_result": false
+  },
+  "game_window_title": "Pureplay",
+  "focus_game_before_keys": true,
+  "hotkeys": {
+    "keyboard_overlay": "tab",
+    "green_grid": "g",
+    "heat_map": "y",
+    "scorecard": "t",
+    "ball_trails": "f1",
+    "hud": "h",
+    "weather": "l",
+    "aim_point": "f3",
+    "fly_to_ball": "6",
+    "flyover": "o",
+    "fly_to_aim_point": "j",
+    "first_person": "f6",
+    "aim_reset": "a",
+    "mute": "num_minus",
+    "switch_hands": "n",
+    "fps": "f",
+    "fullscreen": "f11",
+    "fast_forward": "space",
+    "club_down": "k",
+    "club_up": "i",
+    "tee_left": "c",
+    "tee_right": "v",
+    "mulligan": "ctrl+m",
+    "skip_player": "f7",
+    "putter": "u"
+  },
+  "carry_yards": {
+    "Driver": 240,
+    "Wood3": 220,
+    "Wood5": 205,
+    "Hybrid4": 190,
+    "Iron4": 185,
+    "Iron5": 175,
+    "Iron6": 165,
+    "Iron7": 155,
+    "Iron8": 145,
+    "Iron9": 135,
+    "PitchingWedge": 125,
+    "GapWedge": 110,
+    "SandWedge": 95,
+    "LobWedge": 80
+  },
+  "home_assistant": {
+    "enabled": false,
+    "url": "http://homeassistant.local:8123",
+    "token": "",
+    "light_entity": "light.golf_sim",
+    "dim_brightness_pct": 15,
+    "bright_brightness_pct": 100,
+    "auto_dim_on_round_start": false,
+    "auto_brighten_on_round_end": false
+  }
+}
