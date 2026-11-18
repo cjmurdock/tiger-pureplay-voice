@@ -101,7 +101,19 @@ class Tiger:
         elif e.code == "not_ready" and e.blockers:
             self.speaker.say("Not right now, " + BLOCKER_WORDS.get(e.blockers[0], "the game isn't ready") + ".")
         elif e.code == "forbidden_scope":
-            self.speaker.say("I don't have permission to change aim and club. Check Pureplay's Accessories settings.")
+            if self.api.is_read_only:
+                # Paired read-only: the toggle can't fix this, only re-pairing can.
+                self.status("Tiger is paired READ-ONLY. In Pureplay > Settings > Accessories, click "
+                            "Remove next to Tiger Voice Control, close Tiger, delete token.json, "
+                            "start Tiger again and choose 'Aim and club' before Allow.")
+                self.speaker.say("I'm paired read only, so I can't change aim or club. "
+                                 "In Pureplay's Accessories settings, remove me, delete token dot json, "
+                                 "restart me, and choose aim and club when you approve.")
+            else:
+                self.status("Pureplay refused an aim/club change. In Settings > Accessories, turn on "
+                            "'Let Apps Change Aim and Club'.")
+                self.speaker.say("Pureplay won't let me change aim or club. "
+                                 "Turn on Let Apps Change Aim and Club in the Accessories settings.")
         elif e.code == "not_allowed":
             self.speaker.say("Pureplay won't allow that right now.")
         else:

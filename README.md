@@ -20,8 +20,19 @@ Say **"Tiger"** and ask naturally, and your Pureplay golf simulator does it:
 1. Install Python 3.10+ from python.org and tick **Add python.exe to PATH**.
 2. Double-click `setup.bat`.
 3. In Pureplay, go to **Settings > Accessories**. Set **Allow apps from** to This PC and turn **Let Apps Change Aim and Club** on.
-4. Double-click `run_tiger.bat`. In Pureplay, choose **Aim and club**, then **Allow**.
+4. Double-click `run_tiger.bat`. In Pureplay, choose **Aim and club**, then **Allow**. (Not **Read only**: that only lets Tiger read the game, so club and aim commands won't work.)
 5. Say *"Tiger, give me a seven iron."*
+
+## Troubleshooting: "Read only" / "no permission"
+
+If Tiger can tell you the distance but says it doesn't have permission to change club or aim, and **Settings > Accessories** shows a **Read only** tag next to Tiger Voice Control, Tiger was approved read-only. There's nothing extra to install, because the Accessory API is built into Pureplay. To fix it, re-pair Tiger:
+
+1. Close Tiger.
+2. In Pureplay, open **Settings > Accessories** and click **Remove** next to Tiger Voice Control.
+3. Delete `token.json` in your Tiger folder.
+4. Start Tiger again. When Pureplay asks, choose **Aim and club**, then **Allow**.
+
+The tag disappears and club and aim commands work. More fixes are in the [setup guide](docs/Tiger_Setup_Guide.pdf).
 
 ## Documentation
 

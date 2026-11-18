@@ -91,9 +91,13 @@ Plain left/right with no number nudges 2°. Numbers can be said the golf way ("o
 
 - **"Approve … on the Pureplay screen" keeps appearing:** approve it within 60 seconds. If you
   removed Tiger in Settings > Accessories, delete `token.json` and restart.
-- **"I don't have permission to change aim and club":** either *Let Apps Change Aim and Club* is
-  off, or Tiger was approved read-only. Remove Tiger in Settings > Accessories, delete `token.json`,
-  restart, and approve it with control.
+- **"I'm paired read only" / a "Read only" tag next to Tiger in Settings > Accessories:** Tiger was
+  approved read-only, so it can read the game (distance, score) but not change aim or club. Close
+  Tiger, click **Remove** next to it in Settings > Accessories, delete `token.json`, start Tiger
+  again and choose **Aim and club** before **Allow**. Nothing extra needs installing, because the
+  API is built into Pureplay.
+- **"Pureplay won't let me change aim or club":** Tiger has control permission but *Let Apps
+  Change Aim and Club* is off. Turn it on in Settings > Accessories.
 - **It doesn't hear you:** check the mic with `python tiger.py --list-mics`, raise the mic level in
   Windows Sound settings, and run with `--debug` to see everything it hears.
 - **Hotkeys don't work but aim/club do:** Pureplay probably wasn't the active window. See

@@ -147,8 +147,12 @@ class PurePlayClient:
             if "control" in self.scopes:
                 self._status("Connected to Pureplay with aim and club control.")
             else:
-                self._status("Connected to Pureplay read-only. Aim and club commands will use "
-                             "hotkeys where possible.")
+                self._status("Connected to Pureplay READ-ONLY, so Tiger can't change aim or club.\n"
+                             "        To fix: in Pureplay > Settings > Accessories, click Remove next to "
+                             "Tiger Voice Control,\n"
+                             "        close Tiger, delete token.json in the Tiger folder, start Tiger again, "
+                             "and choose\n"
+                             "        'Aim and club' before clicking Allow.")
 
         elif mtype == "response":
             rid = msg.get("id")
@@ -202,6 +206,11 @@ class PurePlayClient:
             self._pending.pop(rid, None)
 
     # ---------- public API ----------
+    @property
+    def is_read_only(self):
+        """Paired, but Pureplay granted read-only (no aim/club control)."""
+        return self.connected.is_set() and "control" not in self.scopes
+
     @property
     def has_control(self):
         return self.connected.is_set() and "control" in self.scopes
