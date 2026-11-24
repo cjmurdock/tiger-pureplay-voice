@@ -143,9 +143,10 @@ def story():
         "<b>Microphone</b>: the mic Tiger listens on, a live level meter, and how sure Tiger must be "
         "before acting. Move that slider toward Strict if Tiger acts on things you didn't say, or toward "
         "Relaxed if it ignores you.",
-        "<b>Distances</b>: your carry for each club, so \u201cwhat should I hit from one fifty\u201d picks "
-        "the right one. The numbers that come with Tiger are only placeholders. Leave clubs you don't "
-        "carry blank.",
+        "<b>Distances</b>: a backup carry for each club. When club suggestion is on in Pureplay, Tiger "
+        "uses Pureplay's suggested club from the player's own bag instead. These numbers are used when "
+        "suggestion is off, or for \u201cwhat should I hit from one fifty\u201d when that isn't your "
+        "distance. The ones that come with Tiger are placeholders.",
         "<b>Status</b>: whether Tiger is running and how it's paired with Pureplay, a <b>Re-pair</b> "
         "button, and shortcuts to the Tiger folder and config.json.",
         "<b>Updates</b>: checks for a new version when the window opens. <b>Update now</b> installs it "

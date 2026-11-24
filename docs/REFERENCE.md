@@ -52,7 +52,7 @@ ignores polite filler, so these all work the same:
 |---|---|
 | A club | give me a seven iron · can I get the driver · I'll hit a pitching wedge · let's go with a three wood · putter please |
 | Club for a distance | what should I hit from one fifty · club for a hundred and twenty · what club for one oh five |
-| Club for this shot | what club should I hit · what should I hit · club for the pin (putter on the green) |
+| Club for this shot | what club should I hit · what should I hit · club for the pin (putter on the green). Uses Pureplay's suggested club from the player's own bag when club suggestion is on |
 | Pureplay's suggestion | suggest a club · reset the club |
 | Step through the bag | next club · previous club · club up · club down |
 | Nudge aim | aim left · aim a little right (1°) · aim a lot left (5°) · aim right three degrees · move it left ten |
@@ -86,7 +86,9 @@ Say **"Tiger, open settings"**, or double-click **Tiger Settings.bat** (or run
   the box, then **Use this voice**. **Speed** and **Volume** save as you move them.
 - **Microphone:** pick the mic, talk and watch the level bar, then **Use this microphone**. The
   slider below it is `min_confidence`.
-- **Distances:** your carry for each club (`carry_yards`). Blank means the club isn't in your bag.
+- **Distances:** backup carry for each club (`carry_yards`), used only when Pureplay's club
+  suggestion is off or you ask about a distance other than the one you have. Blank means the club
+  isn't in your bag.
 - **Status:** whether Tiger is running, how it's paired with Pureplay, **Re-pair Tiger**, and
   buttons to open the Tiger folder and config.json. **Start Tiger** runs `run_tiger.bat` if it isn't
   running.
@@ -102,7 +104,10 @@ keeps its last good settings and the window shows where the mistake is.
 
 ## Settings (config.json)
 
-- **`carry_yards`**: your carry distance for each club, used by "club for…". Club names are
+- **`carry_yards`**: your carry distance for each club. Only a backup: with Pureplay's club
+  suggestion on, "what club should I hit" (and "what should I hit from N" when N is the distance you
+  have) uses Pureplay's suggestion from the player's own bag. These numbers are used for other
+  distances and when suggestion is off. Club names are
   `Driver`, `Wood3`, `Hybrid4`, `Iron7`, `PitchingWedge`, `GapWedge`, `SandWedge`, `LobWedge`.
   The numbers in it are placeholders, so replace them with yours.
 - **`announce`**: `your_turn` and `distance_on_turn` are the callouts when a shot is set up.

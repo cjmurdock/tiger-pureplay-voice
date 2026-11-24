@@ -413,9 +413,13 @@ class SettingsWindow:
     def build_distance_tab(self):
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Distances")
-        ttk.Label(tab, text="Your carry distance in yards for each club, used for \"what should I hit "
-                            "from one fifty\". Leave a club blank if it isn't in your bag.",
-                  style="Hint.TLabel", wraplength=590).pack(anchor="w")
+        ttk.Label(tab, text="For the shot in front of you (\"what club should I hit\"), Tiger uses "
+                            "Pureplay's suggested club, which comes from the player's own bag in "
+                            "Pureplay, whenever club suggestion is on in Pureplay.\n\nThese "
+                            "distances are only a backup: for \"what should I hit from one fifty\" "
+                            "when that isn't the distance you have, and when club suggestion is off. "
+                            "Carry in yards; leave a club blank if it isn't in your bag.",
+                  style="Hint.TLabel", wraplength=590, justify="left").pack(anchor="w")
         grid = ttk.Frame(tab)
         grid.pack(fill="x", pady=(10, 0))
         carries = self.cfg.get("carry_yards") or {}

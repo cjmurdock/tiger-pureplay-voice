@@ -292,6 +292,16 @@ class Tiger:
         res = await self.api.command("club.reset")
         self.speaker.say(club_spoken(res.get("club")))
 
+    @staticmethod
+    def pureplay_suggests(snap):
+        """True when Pureplay's own club suggestion (club.reset) can be used right now: it's on
+        for this round and player, and it uses the distances in that player's Pureplay bag."""
+        return "club.reset" in ((snap.get("readiness") or {}).get("allowedCommands") or [])
+
+    async def pureplay_club(self, prefix=""):
+        res = await self.api.command("club.reset")
+        self.speaker.say(prefix + club_spoken(res.get("club")))
+
     async def do_club_for(self, yards, prefix_distance=True):
         self.need_control()
         snap, player = await self.active_player()
@@ -299,10 +309,14 @@ class Tiger:
             raise ApiError("not_ready", blockers=["not_your_turn"])
         if self.cfg.get("units") in ("metres", "meters"):
             yards = yards * M_TO_YD
+        # Asking about the shot in front of you: let Pureplay pick from the player's own bag.
+        to_pin = player.get("distanceToHoleM")
+        if to_pin is not None and abs(to_pin * M_TO_YD - yards) <= 5 and self.pureplay_suggests(snap):
+            return await self.pureplay_club()
         types = [b.get("type") for b in player.get("bag") or []]
         choice = pick_club_for(yards, self.cfg.get("carry_yards", {}), types)
         if not choice:
-            self.speaker.say("Add your carry distances to the config file first.")
+            self.speaker.say("Add your carry distances in Tiger Settings first.")
             return
         await self.set_club_type(choice)
 
@@ -315,14 +329,19 @@ class Tiger:
                 return await self.set_club_type("Putter")
             return await self.press("putter")
         self.need_control()
+        dist, unit = self.units_distance(player["distanceToHoleM"])
+        prefix = f"{spoken_number(dist)} out. "
+        if self.pureplay_suggests(snap):
+            # Pureplay's suggestion uses the distances in this player's own Pureplay bag.
+            return await self.pureplay_club(prefix)
         yards = player["distanceToHoleM"] * M_TO_YD
         types = [b.get("type") for b in player.get("bag") or []]
         choice = pick_club_for(yards, self.cfg.get("carry_yards", {}), types)
         if not choice:
-            self.speaker.say("Add your carry distances to the config file first.")
+            self.speaker.say("Turn on club suggestion in Pureplay, or add your distances in "
+                             "Tiger Settings.")
             return
-        dist, unit = self.units_distance(player["distanceToHoleM"])
-        await self.set_club_type(choice, prefix=f"{spoken_number(dist)} out. ")
+        await self.set_club_type(choice, prefix=prefix)
 
     async def do_aim_nudge(self, deg):
         self.need_control()
