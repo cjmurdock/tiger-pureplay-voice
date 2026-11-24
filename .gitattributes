@@ -1,2 +1,4 @@
 *.bat text eol=crlf
 *.pdf binary
+# Downloaded on its own (raw), so store it with Windows line endings
+Tiger_Update.bat -text
