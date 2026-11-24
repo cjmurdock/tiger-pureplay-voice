@@ -66,9 +66,8 @@ def update_box():
                       "need anything else in this guide.", BODY),
             Spacer(1, 4),
             Paragraph("<b>No Updates tab yet</b> (copies from before 24 November 2026)? Download "
-                      "<b>Tiger_Update.bat</b> from the Tiger GitHub page "
-                      "(github.com/cjmurdock/tiger-pureplay-voice: open the file, then use the Download raw "
-                      "file button) and double-click it. It finds "
+                      "<b>Tiger_Update.bat</b> from the Releases page "
+                      "(github.com/cjmurdock/tiger-pureplay-voice/releases) and double-click it. It finds "
                       "your Tiger folder, closes Tiger, updates it the same way and starts it again. "
                       "If Windows warns about an unknown app, choose More info, then Run anyway. "
                       "After that, use the Updates tab.", BODY)]
