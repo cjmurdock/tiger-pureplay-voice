@@ -5,6 +5,8 @@
     Distances    your carry distance for each club
     Status       is Tiger running, is it paired with Pureplay (and how), re-pair
 
+    Updates      check GitHub for a new version and install it in one click
+
 Start it with "Tiger Settings.bat" or "python tiger.py --settings". Changes are saved to
 config.json straight away (keeping everything else in the file), and a running Tiger picks
 them up within a second, so there's no need to restart it.
@@ -12,7 +14,9 @@ them up within a second, so there's no need to restart it.
 import array
 import math
 import os
+import queue
 import subprocess
+import threading
 import sys
 import time
 import tkinter as tk
@@ -48,6 +52,9 @@ class SettingsWindow:
         self.mic_stream = None
         self.mic_level = 0.0
         self.mic_devices = []
+        self._ui = queue.Queue()          # work from background threads, run on the UI thread
+        self.latest = None
+        self.updating = False
 
         root.title("Tiger Settings")
         root.minsize(640, 520)
@@ -67,6 +74,7 @@ class SettingsWindow:
         self.build_mic_tab()
         self.build_distance_tab()
         self.build_status_tab()
+        self.build_update_tab()
         self.saved_label = ttk.Label(root, style="Hint.TLabel", padding=(12, 0, 12, 10))
         self.saved_label.pack(fill="x")
 
@@ -518,8 +526,7 @@ class SettingsWindow:
         if sys.platform != "win32" or not os.path.exists(bat):
             messagebox.showinfo("Tiger Settings", "Start Tiger with run_tiger.bat.")
             return
-        subprocess.Popen(["cmd", "/c", "start", "Tiger", "/min", bat], cwd=self.base_dir,
-                         creationflags=0x08000000)    # CREATE_NO_WINDOW
+        self._launch_tiger()
         self.saved_label.configure(text="Starting Tiger...")
 
     def repair(self):
@@ -548,6 +555,155 @@ class SettingsWindow:
         else:
             subprocess.Popen(["xdg-open", path])
 
+    # ------------------------------------------------------------------ updates tab
+    def build_update_tab(self):
+        tab = ttk.Frame(self.nb, padding=12)
+        self.nb.add(tab, text="Updates")
+        self.update_headline = ttk.Label(tab, text="Checking GitHub for updates...", style="Big.TLabel")
+        self.update_headline.pack(anchor="w")
+        info = ttk.Frame(tab)
+        info.pack(fill="x", pady=(10, 0))
+        info.columnconfigure(1, weight=1)
+        ttk.Label(info, text="You have").grid(row=0, column=0, sticky="nw", padx=(0, 16), pady=3)
+        self.update_mine = ttk.Label(info, wraplength=480, justify="left")
+        self.update_mine.grid(row=0, column=1, sticky="w", pady=3)
+        ttk.Label(info, text="Newest").grid(row=1, column=0, sticky="nw", padx=(0, 16), pady=3)
+        self.update_latest = ttk.Label(info, wraplength=480, justify="left")
+        self.update_latest.grid(row=1, column=1, sticky="w", pady=3)
+        ttk.Label(tab, text="Updating keeps your settings (voice, microphone, distances and everything "
+                            "else in config.json), your Pureplay pairing and the speech model. If Tiger "
+                            "is running, it's closed for the update and started again afterwards. "
+                            "The files that get replaced are saved in the backups folder.",
+                  style="Hint.TLabel", wraplength=590, justify="left").pack(anchor="w", pady=(12, 10))
+        btns = ttk.Frame(tab)
+        btns.pack(fill="x")
+        self.update_btn = ttk.Button(btns, text="Update now", command=self.start_update)
+        self.update_btn.pack(side="left")
+        self.check_btn = ttk.Button(btns, text="Check again", command=self.check_updates)
+        self.check_btn.pack(side="left", padx=(6, 0))
+        self.reopen_btn = ttk.Button(btns, text="Restart Tiger Settings", command=self.reopen)
+        self.update_log = ttk.Label(tab, wraplength=590, justify="left")
+        self.update_log.pack(anchor="w", pady=(12, 0))
+        self.show_installed()
+        self.update_btn.state(["disabled"])
+        self.root.after(800, self.check_updates)
+
+    def show_installed(self):
+        from .updater import installed_version
+        mine = installed_version(self.base_dir)
+        self.update_mine.configure(
+            text=f"{mine['date']}  {mine['message']}" if mine else
+            "Not recorded (Tiger was installed or updated by hand)")
+
+    def run_in_background(self, work, done):
+        """Run work() on a thread, then done(result or exception) on the UI thread."""
+        def go():
+            try:
+                result = work()
+            except Exception as e:
+                result = e
+            self._ui.put(lambda: done(result))
+        threading.Thread(target=go, daemon=True).start()
+
+    def check_updates(self):
+        from .updater import latest_commit
+        if self.updating:
+            return
+        self.check_btn.state(["disabled"])
+        self.update_headline.configure(text="Checking GitHub for updates...", style="Big.TLabel")
+        self.run_in_background(latest_commit, self.show_check)
+
+    def show_check(self, latest):
+        from .updater import is_current, installed_version
+        self.check_btn.state(["!disabled"])
+        if not isinstance(latest, dict):
+            self.latest = None
+            self.update_headline.configure(text="Couldn't reach GitHub. Check the internet connection.",
+                                           style="Bad.TLabel")
+            self.update_latest.configure(text="Unknown")
+            self.update_btn.state(["disabled"])
+            return
+        self.latest = latest
+        self.update_latest.configure(text=f"{latest['date']}  {latest['message']}")
+        if is_current(self.base_dir, latest):
+            self.update_headline.configure(text="You have the newest version.", style="Good.TLabel")
+            self.update_btn.state(["disabled"])
+            self.nb.tab(4, text="Updates")
+        else:
+            known = installed_version(self.base_dir) is not None
+            self.update_headline.configure(
+                text="An update is available." if known else
+                "Update to make sure you have the newest version.", style="Bad.TLabel")
+            self.update_btn.state(["!disabled"])
+            self.nb.tab(4, text="Updates (new)")
+
+    def start_update(self):
+        if self.updating or not self.latest:
+            return
+        self.updating = True
+        self.update_btn.state(["disabled"])
+        self.check_btn.state(["disabled"])
+        base, latest = self.base_dir, self.latest
+        say = lambda text: self._ui.put(lambda: self.update_log.configure(text=text))
+
+        def work():
+            from .updater import download_and_install
+            was_running = tiger_is_running(base)
+            if was_running:
+                say("Closing Tiger...")
+                config_store.send_request(base, "quit")
+                for _ in range(40):
+                    time.sleep(0.5)
+                    if not tiger_is_running(base):
+                        break
+                else:
+                    raise RuntimeError("Tiger didn't close. Close its window yourself, then press "
+                                       "Update now again.")
+                time.sleep(0.5)
+            say("Downloading and installing the update...")
+            summary = download_and_install(base, latest)
+            if was_running:
+                say("Starting Tiger again...")
+                self._launch_tiger()
+            summary["was_running"] = was_running
+            return summary
+
+        self.run_in_background(work, self.update_finished)
+
+    def update_finished(self, result):
+        self.updating = False
+        self.check_btn.state(["!disabled"])
+        if isinstance(result, Exception):
+            self.update_log.configure(text=f"The update didn't finish: {result}\nYour settings and pairing "
+                                           "weren't touched.", style="Bad.TLabel")
+            self.update_btn.state(["!disabled"])
+            return
+        n = len(result["changed"])
+        lines = [f"Updated {n} file{'s' if n != 1 else ''}." if n else "Your files were already current."]
+        if result["new_settings"]:
+            lines.append("New settings added with their defaults: " + ", ".join(result["new_settings"]) + ".")
+        if result.get("packages") and not result.get("packages_ok"):
+            lines.append("Some Python packages couldn't be installed. Run setup.bat once.")
+        if result["was_running"]:
+            lines.append("Tiger has been started again.")
+        lines.append("Restart Tiger Settings to use the new version of this window.")
+        self.update_log.configure(text="\n".join(lines), style="Good.TLabel")
+        self.show_installed()
+        self.show_check(self.latest)
+        self.reopen_btn.pack(side="left", padx=(6, 0))
+
+    def reopen(self):
+        script = os.path.join(self.base_dir, "tiger.py")
+        flags = 0x00000008 if sys.platform == "win32" else 0      # DETACHED_PROCESS
+        subprocess.Popen([sys.executable, script, "--settings"], cwd=self.base_dir, creationflags=flags)
+        self.on_close()
+
+    def _launch_tiger(self):
+        bat = os.path.join(self.base_dir, "run_tiger.bat")
+        if sys.platform == "win32" and os.path.exists(bat):
+            subprocess.Popen(["cmd", "/c", "start", "Tiger", "/min", bat], cwd=self.base_dir,
+                             creationflags=0x08000000)    # CREATE_NO_WINDOW
+
     # ------------------------------------------------------------------ housekeeping
     def on_tab_changed(self, _):
         if self.nb.index(self.nb.select()) == 1:
@@ -560,6 +716,11 @@ class SettingsWindow:
     def tick(self):
         """Keep up with changes made elsewhere (e.g. "Tiger, switch to Linda")."""
         try:
+            while True:
+                try:
+                    self._ui.get_nowait()()
+                except queue.Empty:
+                    break
             self.update_meter()
             now = time.monotonic()
             if now - getattr(self, "_last_slow", 0) > 1.5:
@@ -581,6 +742,9 @@ class SettingsWindow:
             self.root.after(80, self.tick)
 
     def on_close(self):
+        if self.updating and not messagebox.askyesno(
+                "Tiger Settings", "An update is still running. Close anyway?"):
+            return
         for job, run in list(self._save_jobs.values()):   # finish saves still waiting
             self.root.after_cancel(job)
             run()

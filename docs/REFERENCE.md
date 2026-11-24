@@ -10,9 +10,9 @@ is ignored, so talking about your 7 iron does nothing.
   way JoyToKey does. JoyToKey can keep running alongside.
 - **Callouts:** when a shot is set up, Tiger says who's up (in group play) and the distance.
 
-> **Already using Tiger? To update:** double-click **`update.bat`** in your Tiger folder. It downloads the latest version from GitHub, asks you to close Tiger if it's running, and keeps your settings (`config.json`), your Pureplay pairing (`token.json`) and the speech model. Any new settings are added with their defaults, and the replaced files are backed up in `backups\`.
+> **Already using Tiger? To update:** open **Tiger Settings** and go to the **Updates** tab, then press **Update now** (or double-click **`update.bat`** in your Tiger folder). It downloads the latest version from GitHub, closes and restarts Tiger for you, and keeps your settings (`config.json`), your Pureplay pairing (`token.json`) and the speech model. Any new settings are added with their defaults, and the replaced files are backed up in `backups\`.
 >
-> **No `update.bat` in your folder?** (copies from before 24 November 2026) Update by hand once: close Tiger, on the GitHub page click **Code > Download ZIP**, open the `tiger-pureplay-voice-main` folder inside it, and copy **everything in it except `config.json`** into your Tiger folder, choosing *Replace* when Windows asks. Don't delete your old folder first: the speech model in `models\` isn't in the download. You don't need to run `setup.bat` again. From then on, `update.bat` does it for you.
+> **No `update.bat` in your folder?** (copies from before 24 November 2026) Update by hand once: close Tiger, on the GitHub page click **Code > Download ZIP**, open the `tiger-pureplay-voice-main` folder inside it, and copy **everything in it except `config.json`** into your Tiger folder, choosing *Replace* when Windows asks. Don't delete your old folder first: the speech model in `models\` isn't in the download. You don't need to run `setup.bat` again. From then on, the Updates tab (or `update.bat`) does it for you.
 
 ## Setup (once)
 
@@ -88,6 +88,10 @@ Double-click **Tiger Settings.bat** (or run `python tiger.py --settings`).
 - **Status:** whether Tiger is running, how it's paired with Pureplay, **Re-pair Tiger**, and
   buttons to open the Tiger folder and config.json. **Start Tiger** runs `run_tiger.bat` if it isn't
   running.
+- **Updates:** checks GitHub when the window opens ("Updates (new)" on the tab means there's one).
+  **Update now** closes Tiger, installs the update (keeping config.json, token.json and the speech
+  model, and adding any new settings with their defaults), starts Tiger again, and saves the
+  replaced files in `backups\`. `update.bat` does the same from a command window.
 
 Everything is saved to config.json straight away, changing only that setting, with the previous file
 kept as `config.backup.json`. A running Tiger checks config.json every second and uses the new voice

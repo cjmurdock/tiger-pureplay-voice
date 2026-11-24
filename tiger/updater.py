@@ -172,6 +172,33 @@ def apply_update(base_dir, zip_bytes, say=print):
     return summary
 
 
+def save_version(base_dir, latest):
+    with open(os.path.join(base_dir, VERSION_FILE), "w", encoding="utf-8") as f:
+        json.dump(dict(latest, installed=time.strftime("%Y-%m-%d %H:%M")), f, indent=2)
+
+
+def is_current(base_dir, latest):
+    mine = installed_version(base_dir)
+    return bool(latest and mine and mine.get("sha") == latest["sha"])
+
+
+def download_and_install(base_dir, latest=None, say=print):
+    """Download main from GitHub and install it. Installs Python packages if needed."""
+    data = _get(ZIP_URL, timeout=120)
+    summary = apply_update(base_dir, data, say=say)
+    if latest:
+        save_version(base_dir, latest)
+    if summary["packages"]:
+        flags = 0x08000000 if sys.platform == "win32" else 0       # CREATE_NO_WINDOW
+        python = sys.executable
+        if python.lower().endswith("pythonw.exe"):
+            python = python[:-len("pythonw.exe")] + "python.exe"
+        summary["packages_ok"] = subprocess.call(
+            [python, "-m", "pip", "install", "-r", os.path.join(base_dir, "requirements.txt")],
+            creationflags=flags) == 0
+    return summary
+
+
 def _read_bytes(path):
     try:
         with open(path, "rb") as f:
@@ -191,10 +218,9 @@ def run(base_dir, zip_path=None, assume_yes=False):
     print(f"Tiger folder: {base_dir}\n")
 
     latest = None if zip_path else latest_commit()
-    mine = installed_version(base_dir)
     if latest:
         print(f"Latest version on GitHub: {latest['date']}  {latest['message']}")
-        if mine and mine.get("sha") == latest["sha"]:
+        if is_current(base_dir, latest):
             print("\nYou already have the latest version. Nothing to do.")
             return 0
     elif not zip_path:
@@ -216,20 +242,15 @@ def run(base_dir, zip_path=None, assume_yes=False):
     try:
         if zip_path:
             with open(zip_path, "rb") as f:
-                data = f.read()
+                summary = apply_update(base_dir, f.read())
         else:
             print("\nDownloading the latest version...")
-            data = _get(ZIP_URL, timeout=120)
-        summary = apply_update(base_dir, data)
+            summary = download_and_install(base_dir, latest)
     except Exception as e:
         print(f"\nThe update didn't work: {e}")
         print("Nothing important was lost: your settings and pairing aren't touched, and any files")
         print("that were replaced are in the backups folder.")
         return 1
-
-    if latest:
-        with open(os.path.join(base_dir, VERSION_FILE), "w", encoding="utf-8") as f:
-            json.dump(dict(latest, installed=time.strftime("%Y-%m-%d %H:%M")), f, indent=2)
 
     print()
     if summary["changed"]:
@@ -246,9 +267,9 @@ def run(base_dir, zip_path=None, assume_yes=False):
     print("Kept as they were: config.json settings, token.json (your Pureplay pairing), the speech model.")
 
     if summary["packages"]:
-        print("\nThis version needs updated Python packages. Installing...")
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r",
-                         os.path.join(base_dir, "requirements.txt")])
+        print("\nThis version needed updated Python packages: " +
+              ("installed." if summary.get("packages_ok") else
+               "that didn't work. Run setup.bat to install them."))
 
     print("\nUpdate finished.")
     if was_running and (assume_yes or _ask("Start Tiger again now? [Y/n] ")):

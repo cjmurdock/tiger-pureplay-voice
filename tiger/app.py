@@ -168,6 +168,11 @@ class Tiger:
             await self.api.repair()
             if self._api_task is not None and self._api_task.done():
                 self._api_task = asyncio.create_task(self.api.run_forever())
+        elif action == "quit":
+            # Tiger Settings is about to update Tiger's files.
+            self.status("Closing so Tiger can be updated.")
+            config_store.write_status(self.base_dir, {"running": False})
+            os._exit(0)     # also releases the single-instance lock
         elif action == "say" and req.get("text"):
             self.speaker.say(str(req["text"])[:300])
 

@@ -59,8 +59,9 @@ def step(n, title, *parts):
 def update_box():
     """'Already using Tiger?' note at the top, for people updating rather than installing."""
     text = [Paragraph("Already using Tiger? To update", STEP_TITLE),
-            Paragraph("Double-click <b>update.bat</b> in your Tiger folder. It downloads the latest "
-                      "version, asks you to close Tiger if it's running, and keeps your settings "
+            Paragraph("Open <b>Tiger Settings</b>, go to the <b>Updates</b> tab and press <b>Update "
+                      "now</b> (or double-click <b>update.bat</b> in your Tiger folder). It downloads the "
+                      "latest version, closes and restarts Tiger for you, and keeps your settings "
                       "(config.json), your Pureplay pairing (token.json) and the speech model. You don't "
                       "need anything else in this guide.", BODY),
             Spacer(1, 4),
@@ -69,7 +70,7 @@ def update_box():
                       "<b>tiger-pureplay-voice-main</b> folder inside it, and copy everything in it "
                       "<b>except config.json</b> into your Tiger folder, choosing Replace when Windows "
                       "asks. Don't delete the old folder first (the speech model isn't in the download), "
-                      "and don't run setup.bat again. After that, update.bat does it for you.", BODY)]
+                      "and don't run setup.bat again. After that, the Updates tab does it for you.", BODY)]
     t = Table([[text]], colWidths=[522])
     t.setStyle(TableStyle([
         ("BOX", (0, 0), (-1, -1), 1.2, GREEN), ("BACKGROUND", (0, 0), (-1, -1), white),
@@ -98,7 +99,7 @@ def story():
                   "A USB microphone near the hitting area. A 360\u00b0 conference mic (for example TONOR "
                   "G11 or TONOR TM20) works well in a sim room.",
                   "Speakers (Tiger talks back).",
-                  "Internet for the one-time setup only."])
+                  "Internet for setup and updates (Tiger itself runs offline)."])
     s.append(Paragraph("Install", H))
     s += [
         step(1, "Install Python",
@@ -145,7 +146,9 @@ def story():
         "the right one. The numbers that come with Tiger are only placeholders. Leave clubs you don't "
         "carry blank.",
         "<b>Status</b>: whether Tiger is running and how it's paired with Pureplay, a <b>Re-pair</b> "
-        "button, and shortcuts to the Tiger folder and config.json."])
+        "button, and shortcuts to the Tiger folder and config.json.",
+        "<b>Updates</b>: checks for a new version when the window opens. <b>Update now</b> installs it "
+        "and restarts Tiger, keeping all your settings."])
     s.append(Paragraph("Other settings (config.json)", H))
     s += bullets([
         "<b>Callouts</b>: <b>\"announce\"</b> controls the \u201cyou're up, 150 to the pin\u201d callouts. "

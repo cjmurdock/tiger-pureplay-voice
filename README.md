@@ -4,16 +4,16 @@ Say **"Tiger"** and ask naturally, and your Pureplay golf simulator does it:
 
 > "Tiger, give me a seven iron." · "Tiger, aim a little left." · "Tiger, what should I hit from one fifty?" · "Tiger, take a mulligan." · "Tiger, do a flyover." · "Tiger, how far?"
 
-> **Already using Tiger? To update:** double-click **`update.bat`** in your Tiger folder. It downloads the latest version from GitHub, asks you to close Tiger if it's running, and keeps your settings (`config.json`), your Pureplay pairing (`token.json`) and the speech model. Any new settings are added with their defaults, and the replaced files are backed up in `backups\`.
+> **Already using Tiger? To update:** open **Tiger Settings** and go to the **Updates** tab, then press **Update now** (or double-click **`update.bat`** in your Tiger folder). It downloads the latest version from GitHub, closes and restarts Tiger for you, and keeps your settings (`config.json`), your Pureplay pairing (`token.json`) and the speech model. Any new settings are added with their defaults, and the replaced files are backed up in `backups\`.
 >
-> **No `update.bat` in your folder?** (copies from before 24 November 2026) Update by hand once: close Tiger, click **Code > Download ZIP** above, open the `tiger-pureplay-voice-main` folder inside it, and copy **everything in it except `config.json`** into your Tiger folder, choosing *Replace* when Windows asks. Don't delete your old folder first: the speech model in `models\` isn't in the download. You don't need to run `setup.bat` again. From then on, `update.bat` does it for you.
+> **No `update.bat` in your folder?** (copies from before 24 November 2026) Update by hand once: close Tiger, click **Code > Download ZIP** above, open the `tiger-pureplay-voice-main` folder inside it, and copy **everything in it except `config.json`** into your Tiger folder, choosing *Replace* when Windows asks. Don't delete your old folder first: the speech model in `models\` isn't in the download. You don't need to run `setup.bat` again. From then on, the Updates tab (or `update.bat`) does it for you.
 
 - **Offline:** speech recognition runs on the CPU (Vosk), so it doesn't use the graphics card or the internet.
 - **Precise aim and club control** through the official [Pureplay Accessory API](https://github.com/PureplayGolf/Pureplay-Accessory): pick any club by name, nudge aim by exact degrees, aim straight at the pin, or pick a club for a distance from your own carry numbers.
 - **Every Pureplay hotkey by voice:** mulligan, skip, flyover, cameras, scorecard, heat map, green grid and more.
 - **Talks back:** confirms commands and calls out "you're up, 150 to the pin" when it's your shot.
 - **Safe around conversation:** nothing happens unless you say "Tiger" first, so talking about your 7 iron with friends is fine.
-- **Tiger Settings window:** pick the voice (with a preview), speed and volume, choose the mic with a live level meter, enter your carry distances, and check the Pureplay pairing. A running Tiger picks up changes straight away, so there's no restart. You can also change the voice by voice: "Tiger, switch to Linda", "Tiger, talk faster".
+- **Tiger Settings window:** pick the voice (with a preview), speed and volume, choose the mic with a live level meter, enter your carry distances, check the Pureplay pairing, and update Tiger in one click. A running Tiger picks up changes straight away, so there's no restart. You can also change the voice by voice: "Tiger, switch to Linda", "Tiger, talk faster".
 
 ## Get it
 
