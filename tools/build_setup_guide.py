@@ -130,7 +130,8 @@ def story():
              "club and says it back. See <b>Tiger_Voice_Commands.pdf</b> for everything you can say."),
     ]
     s.append(Paragraph("Tiger Settings", H))
-    s.append(Paragraph("Open <b>Tiger Settings.bat</b> any time. Changes are saved to config.json "
+    s.append(Paragraph("Say <b>\u201cTiger, open settings\u201d</b> or double-click <b>Tiger Settings.bat</b> "
+                       "any time (\u201cTiger, close settings\u201d closes it). Changes are saved to config.json "
                        "straight away and a running Tiger uses them within a second, so there's no need "
                        "to restart it.", BODY))
     s.append(Spacer(1, 4))

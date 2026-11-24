@@ -104,6 +104,20 @@ if IS_WINDOWS:
         ok = bool(user32.SetForegroundWindow(hwnd))
         time.sleep(0.05)
         return ok
+
+    def find_exact_window(title):
+        """A visible window whose title is exactly this (e.g. "Tiger Settings")."""
+        return next((h for h, t in list_windows() if t == title), None)
+
+    def bring_to_front(hwnd):
+        if user32.IsIconic(hwnd):
+            user32.ShowWindow(hwnd, 9)          # SW_RESTORE
+        _key_event("alt", False)
+        _key_event("alt", True)
+        return bool(user32.SetForegroundWindow(hwnd))
+
+    def close_window(hwnd):
+        return bool(user32.PostMessageW(hwnd, 0x0010, 0, 0))     # WM_CLOSE
 else:
     def _key_event(name, up):
         log.info("[not Windows] key %s %s", name, "up" if up else "down")
@@ -115,6 +129,15 @@ else:
         return None
 
     def focus_window(title_part):
+        return False
+
+    def find_exact_window(title):
+        return None
+
+    def bring_to_front(hwnd):
+        return False
+
+    def close_window(hwnd):
         return False
 
 

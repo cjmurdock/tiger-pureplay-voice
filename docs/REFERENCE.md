@@ -68,6 +68,7 @@ ignores polite filler, so these all work the same:
 | Lights (Home Assistant) | lights down · dim the lights · lights up |
 | Tiger's voice | switch to Linda · use Mark · change your voice to Richard · let me hear Zira · next voice · what voices do you have |
 | Voice speed / volume | talk faster · talk slower · slow down · speak up · louder · quieter · not so loud |
+| Settings window | settings · open settings · show me the settings · close settings |
 | Tiger itself | go to sleep · wake up · help |
 
 Voice names are the ones installed on the PC (Tiger reads them at startup). Voice, speed and volume
@@ -78,7 +79,8 @@ Plain left/right with no number nudges 2°. Numbers can be said the golf way ("o
 
 ## Tiger Settings window
 
-Double-click **Tiger Settings.bat** (or run `python tiger.py --settings`).
+Say **"Tiger, open settings"**, or double-click **Tiger Settings.bat** (or run
+`python tiger.py --settings`). "Tiger, close settings" closes it and puts Pureplay back in front.
 
 - **Voice:** every voice Tiger can use. Double-click or press **Preview** to hear it with the line in
   the box, then **Use this voice**. **Speed** and **Volume** save as you move them.

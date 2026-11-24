@@ -13,7 +13,7 @@ Say **"Tiger"** and ask naturally, and your Pureplay golf simulator does it:
 - **Every Pureplay hotkey by voice:** mulligan, skip, flyover, cameras, scorecard, heat map, green grid and more.
 - **Talks back:** confirms commands and calls out "you're up, 150 to the pin" when it's your shot.
 - **Safe around conversation:** nothing happens unless you say "Tiger" first, so talking about your 7 iron with friends is fine.
-- **Tiger Settings window:** pick the voice (with a preview), speed and volume, choose the mic with a live level meter, enter your carry distances, check the Pureplay pairing, and update Tiger in one click. A running Tiger picks up changes straight away, so there's no restart. You can also change the voice by voice: "Tiger, switch to Linda", "Tiger, talk faster".
+- **Tiger Settings window:** pick the voice (with a preview), speed and volume, choose the mic with a live level meter, enter your carry distances, check the Pureplay pairing, and update Tiger in one click. A running Tiger picks up changes straight away, so there's no restart. Open it by saying "Tiger, open settings". You can also change the voice by voice: "Tiger, switch to Linda", "Tiger, talk faster".
 
 ## Get it
 

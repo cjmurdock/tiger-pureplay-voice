@@ -194,6 +194,12 @@ VOICE_EXAMPLES = ["next voice", "different voice", "another voice", "try another
                   "speak softer", "not so loud", "volume up", "volume down",
                   "turn your voice up", "turn your voice down", "turn up your voice",
                   "turn down your voice"]
+SETTINGS_EXAMPLES = ["settings", "open settings", "open the settings", "open your settings",
+                     "show settings", "show the settings", "show me the settings", "show me settings",
+                     "bring up the settings", "bring up settings", "pull up the settings",
+                     "go to settings", "settings please", "the settings",
+                     "close settings", "close the settings", "hide settings", "hide the settings",
+                     "close your settings", "shut the settings", "exit settings"]
 VOICE_NAME_PREFIXES = ["", "switch to", "switch voice to", "switch the voice to", "change to",
                        "change voice to", "change your voice to", "change the voice to",
                        "use", "use the voice", "try", "let me hear", "talk like", "voice",
@@ -236,6 +242,7 @@ class Vocabulary:
         v = cls(wake_word=wake_word.lower().strip(), voices=voice_words(voice_names))
         ex = v.examples
         ex += VOICE_EXAMPLES
+        ex += SETTINGS_EXAMPLES
         for word in v.voices:
             for p in VOICE_NAME_PREFIXES:
                 ex.append(f"{p} {word}".strip())
@@ -314,6 +321,12 @@ def interpret(tokens, voices=None):
     text = " ".join(tokens)
     toks = set(tokens)
     C = lambda a, arg=None: Command(a, arg, text)
+
+    # The Tiger Settings window
+    if toks & {"settings", "setting"}:
+        if toks & {"close", "hide", "exit", "shut", "dismiss"}:
+            return C("settings_close")
+        return C("settings_open")
 
     # Tiger's own voice: which one, speed, volume
     voice_cmd = _interpret_voice(text, tokens, toks, voices or {})

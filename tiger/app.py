@@ -1,6 +1,7 @@
 """Tiger: voice control for Pureplay golf."""
 import argparse
 import asyncio
+import subprocess
 import logging
 import os
 import sys
@@ -451,6 +452,44 @@ class Tiger:
             return
         if self.save({"voice.volume": new}):
             self.speaker.say("Louder." if direction > 0 else "Quieter.")
+
+    # ---------- the Tiger Settings window ----------
+    async def do_settings_open(self, _):
+        hwnd = keys.find_exact_window("Tiger Settings")
+        if hwnd:
+            keys.bring_to_front(hwnd)
+            self.speaker.say("Here are the settings.")
+            return
+        python = sys.executable
+        pythonw = os.path.join(os.path.dirname(python), "pythonw.exe")
+        if sys.platform == "win32" and os.path.exists(pythonw):
+            python = pythonw                     # no console window
+        try:
+            subprocess.Popen([python, os.path.join(self.base_dir, "tiger.py"), "--settings"],
+                             cwd=self.base_dir,
+                             creationflags=0x00000008 if sys.platform == "win32" else 0)  # DETACHED
+        except OSError as e:
+            self.status(f"Couldn't open Tiger Settings: {e}")
+            self.speaker.say("I couldn't open the settings.")
+            return
+        self.speaker.say("Opening settings.")
+        # Bring it in front of Pureplay once it has appeared.
+        for _ in range(30):
+            await asyncio.sleep(0.2)
+            hwnd = keys.find_exact_window("Tiger Settings")
+            if hwnd:
+                keys.bring_to_front(hwnd)
+                break
+
+    async def do_settings_close(self, _):
+        hwnd = keys.find_exact_window("Tiger Settings")
+        if not hwnd:
+            self.speaker.say("The settings aren't open.")
+            return
+        keys.close_window(hwnd)
+        self.speaker.say("Closing settings.")
+        await asyncio.sleep(0.5)
+        await asyncio.to_thread(keys.focus_window, self.cfg.get("game_window_title", "Pureplay"))
 
     async def do_help(self, _):
         self.speaker.say("Just ask naturally. For example: give me a seven iron, aim a little left, "
