@@ -56,6 +56,28 @@ def step(n, title, *parts):
     return KeepTogether([t, Spacer(1, 6)])
 
 
+def update_box():
+    """'Already using Tiger?' note at the top, for people updating rather than installing."""
+    text = [Paragraph("Already using Tiger? To update", STEP_TITLE),
+            Paragraph("Double-click <b>update.bat</b> in your Tiger folder. It downloads the latest "
+                      "version, asks you to close Tiger if it's running, and keeps your settings "
+                      "(config.json), your Pureplay pairing (token.json) and the speech model. You don't "
+                      "need anything else in this guide.", BODY),
+            Spacer(1, 4),
+            Paragraph("<b>No update.bat in your folder</b> (copies from before 24 November 2026)? Update "
+                      "by hand once: close Tiger, download the ZIP from GitHub, open the "
+                      "<b>tiger-pureplay-voice-main</b> folder inside it, and copy everything in it "
+                      "<b>except config.json</b> into your Tiger folder, choosing Replace when Windows "
+                      "asks. Don't delete the old folder first (the speech model isn't in the download), "
+                      "and don't run setup.bat again. After that, update.bat does it for you.", BODY)]
+    t = Table([[text]], colWidths=[522])
+    t.setStyle(TableStyle([
+        ("BOX", (0, 0), (-1, -1), 1.2, GREEN), ("BACKGROUND", (0, 0), (-1, -1), white),
+        ("LEFTPADDING", (0, 0), (-1, -1), 10), ("RIGHTPADDING", (0, 0), (-1, -1), 10),
+        ("TOPPADDING", (0, 0), (-1, -1), 7), ("BOTTOMPADDING", (0, 0), (-1, -1), 8)]))
+    return t
+
+
 def footer(canvas, doc):
     canvas.saveState()
     canvas.setFont("Helvetica", 8)
@@ -70,6 +92,7 @@ def story():
          Paragraph("Voice control for Pureplay golf. Say <b>\u201cTiger\u201d</b> and ask naturally: "
                    "\u201cTiger, give me a seven iron.\u201d Runs offline on the sim PC and doesn't use "
                    "the graphics card.", INTRO),
+         Spacer(1, 8), update_box(),
          Paragraph("What you need", H)]
     s += bullets(["A Windows PC running Pureplay.",
                   "A USB microphone near the hitting area. A 360\u00b0 conference mic (for example TONOR "

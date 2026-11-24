@@ -19,10 +19,9 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 from . import config_store
-from .config_store import ConfigError, get
+from .config_store import ConfigError, get, tiger_is_running
 
 PREVIEW_TEXT = "You're up. One fifty to the pin."
-MUTEX_NAME = "Local\\TigerVoiceControl"
 
 # Clubs shown on the Distances tab, longest first (Accessory API club types).
 CLUB_ORDER = (["Driver", "Wood3", "Wood4", "Wood5", "Wood7", "Wood9",
@@ -34,19 +33,6 @@ CLUB_ORDER = (["Driver", "Wood3", "Wood4", "Wood5", "Wood7", "Wood9",
 def club_label(club_type):
     from .commands import club_spoken
     return club_spoken(club_type).capitalize()
-
-
-def tiger_is_running(base_dir):
-    """True if a listening Tiger holds its single-instance lock, or status.json is fresh."""
-    if sys.platform == "win32":
-        import ctypes
-        k32 = ctypes.WinDLL("kernel32", use_last_error=True)
-        h = k32.OpenMutexW(0x00100000, False, MUTEX_NAME)    # SYNCHRONIZE
-        if h:
-            k32.CloseHandle(h)
-            return True
-    st = config_store.read_status(base_dir)
-    return bool(st and st.get("running") and time.time() - st.get("updated", 0) < 8)
 
 
 class SettingsWindow:

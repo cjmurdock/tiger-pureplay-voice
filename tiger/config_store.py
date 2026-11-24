@@ -11,12 +11,15 @@ Pure Python with no Windows dependencies, so it can be tested anywhere.
 """
 import json
 import os
+import sys
 import time
 
 CONFIG = "config.json"
 BACKUP = "config.backup.json"
 STATUS = "status.json"
 REQUEST = "tiger_request.json"
+
+MUTEX_NAME = "Local\\TigerVoiceControl"   # held by a listening Tiger (see app.main)
 
 DELETE = object()   # pass as a value to update_config() to remove that setting
 
@@ -161,3 +164,17 @@ def take_request(base_dir):
     except OSError:
         pass
     return req if isinstance(req, dict) else None
+
+
+def tiger_is_running(base_dir):
+    """True if a listening Tiger holds its single-instance lock, or status.json is fresh."""
+    if sys.platform == "win32":
+        import ctypes
+        k32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        k32.OpenMutexW.restype = ctypes.c_void_p
+        h = k32.OpenMutexW(0x00100000, False, MUTEX_NAME)    # SYNCHRONIZE
+        if h:
+            k32.CloseHandle(h)
+            return True
+    st = read_status(base_dir)
+    return bool(st and st.get("running") and time.time() - st.get("updated", 0) < 8)

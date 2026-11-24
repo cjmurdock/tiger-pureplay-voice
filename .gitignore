@@ -9,8 +9,11 @@ status.json
 tiger_request.json
 config.backup.json
 *.json.tmp*
+*.new
 # Local test scripts and logs
 *_log.txt
 tiger_*test.bat
 tiger_check.bat
 tiger_voices.bat
+backups/
+version.json

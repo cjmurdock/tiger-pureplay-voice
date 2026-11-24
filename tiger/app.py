@@ -531,7 +531,14 @@ def main(argv=None):
     ap.add_argument("--say", metavar="TEXT", help="speak TEXT with the configured voice and exit")
     ap.add_argument("--voice", metavar="NAME", help="voice to use (overrides config.json)")
     ap.add_argument("--settings", action="store_true", help="open the Tiger Settings window")
+    ap.add_argument("--update", action="store_true", help="update Tiger from GitHub (update.bat)")
+    ap.add_argument("--from-zip", metavar="ZIP", help=argparse.SUPPRESS)
+    ap.add_argument("--yes", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
+
+    if args.update:
+        from .updater import run as run_update
+        sys.exit(run_update(base_dir, zip_path=args.from_zip, assume_yes=args.yes))
 
     if args.settings:
         from .settings_window import main as settings_main
@@ -561,7 +568,7 @@ def main(argv=None):
             # Only one listening copy at a time (e.g. if the sim launcher is run twice).
             import ctypes
             kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
-            _mutex = kernel32.CreateMutexW(None, False, "Local\\TigerVoiceControl")
+            _mutex = kernel32.CreateMutexW(None, False, config_store.MUTEX_NAME)
             if ctypes.get_last_error() == 183:   # ERROR_ALREADY_EXISTS
                 print("Tiger is already running.")
                 return

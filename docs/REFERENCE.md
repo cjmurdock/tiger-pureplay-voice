@@ -10,6 +10,10 @@ is ignored, so talking about your 7 iron does nothing.
   way JoyToKey does. JoyToKey can keep running alongside.
 - **Callouts:** when a shot is set up, Tiger says who's up (in group play) and the distance.
 
+> **Already using Tiger? To update:** double-click **`update.bat`** in your Tiger folder. It downloads the latest version from GitHub, asks you to close Tiger if it's running, and keeps your settings (`config.json`), your Pureplay pairing (`token.json`) and the speech model. Any new settings are added with their defaults, and the replaced files are backed up in `backups\`.
+>
+> **No `update.bat` in your folder?** (copies from before 24 November 2026) Update by hand once: close Tiger, on the GitHub page click **Code > Download ZIP**, open the `tiger-pureplay-voice-main` folder inside it, and copy **everything in it except `config.json`** into your Tiger folder, choosing *Replace* when Windows asks. Don't delete your old folder first: the speech model in `models\` isn't in the download. You don't need to run `setup.bat` again. From then on, `update.bat` does it for you.
+
 ## Setup (once)
 
 1. Install Python 3.10+ from python.org if it isn't installed. Tick **Add python.exe to PATH**.
