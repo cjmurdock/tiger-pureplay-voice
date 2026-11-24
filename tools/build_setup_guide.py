@@ -65,12 +65,12 @@ def update_box():
                       "(config.json), your Pureplay pairing (token.json) and the speech model. You don't "
                       "need anything else in this guide.", BODY),
             Spacer(1, 4),
-            Paragraph("<b>No update.bat in your folder</b> (copies from before 24 November 2026)? Update "
-                      "by hand once: close Tiger, download the ZIP from GitHub, open the "
-                      "<b>tiger-pureplay-voice-main</b> folder inside it, and copy everything in it "
-                      "<b>except config.json</b> into your Tiger folder, choosing Replace when Windows "
-                      "asks. Don't delete the old folder first (the speech model isn't in the download), "
-                      "and don't run setup.bat again. After that, the Updates tab does it for you.", BODY)]
+            Paragraph("<b>No Updates tab yet</b> (copies from before 24 November 2026)? Download "
+                      "<b>Tiger_Update.bat</b> from the Releases page on GitHub "
+                      "(github.com/cjmurdock/tiger-pureplay-voice/releases) and double-click it. It finds "
+                      "your Tiger folder, closes Tiger, updates it the same way and starts it again. "
+                      "If Windows warns about an unknown app, choose More info, then Run anyway. "
+                      "After that, use the Updates tab.", BODY)]
     t = Table([[text]], colWidths=[522])
     t.setStyle(TableStyle([
         ("BOX", (0, 0), (-1, -1), 1.2, GREEN), ("BACKGROUND", (0, 0), (-1, -1), white),

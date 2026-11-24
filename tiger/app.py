@@ -539,11 +539,23 @@ def main(argv=None):
     ap.add_argument("--update", action="store_true", help="update Tiger from GitHub (update.bat)")
     ap.add_argument("--from-zip", metavar="ZIP", help=argparse.SUPPRESS)
     ap.add_argument("--yes", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--target", metavar="FOLDER", help=argparse.SUPPRESS)
+    ap.add_argument("--find", action="store_true", help=argparse.SUPPRESS)  # Tiger_Update.bat
+    ap.add_argument("--hint", metavar="FOLDER", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
 
     if args.update:
         from .updater import run as run_update
-        sys.exit(run_update(base_dir, zip_path=args.from_zip, assume_yes=args.yes))
+        if args.find:
+            # Run from a fresh download by Tiger_Update.bat: find the person's own Tiger folder.
+            from .updater import choose_tiger_folder
+            target = choose_tiger_folder(hints=[args.hint], skip=[base_dir])
+            if not target:
+                print("No Tiger folder chosen, so nothing was changed.")
+                sys.exit(1)
+        else:
+            target = os.path.abspath(args.target) if args.target else base_dir
+        sys.exit(run_update(target, zip_path=args.from_zip, assume_yes=args.yes))
 
     if args.settings:
         from .settings_window import main as settings_main

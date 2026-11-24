@@ -212,12 +212,107 @@ def _read(path):
     return b.decode("utf-8", "replace") if b is not None else None
 
 
+def _is_tiger(path):
+    return bool(path) and os.path.isfile(os.path.join(path, "tiger.py")) and \
+        os.path.isfile(os.path.join(path, "tiger", "app.py"))
+
+
+def find_tiger_folders(hints=(), skip=()):
+    """Tiger installs on this PC, real installs (with the speech model) first."""
+    home = os.path.expanduser("~")
+    places = [h for h in hints if h] + [r"C:\Tiger", r"D:\Tiger"] + \
+        [os.path.join(home, *p) for p in (("Tiger",), ("Desktop", "Tiger"), ("Documents", "Tiger"),
+                                           ("OneDrive", "Desktop", "Tiger"),
+                                           ("OneDrive", "Documents", "Tiger"))]
+    skip = {os.path.normcase(os.path.abspath(s)) for s in skip if s}
+    found = []
+
+    def add(p):
+        p = os.path.abspath(p)
+        key = os.path.normcase(p)
+        if _is_tiger(p) and key not in skip and key not in {os.path.normcase(f) for f in found}:
+            found.append(p)
+
+    for p in places:
+        add(p)
+    if not any(os.path.isdir(os.path.join(f, "models")) for f in found):
+        # No set-up Tiger in the usual places: look a few folders deep in the user's folders and at the top of each drive.
+        roots = [(home, 4)]
+        if sys.platform == "win32":
+            import string
+            roots += [(f"{d}:\\", 2) for d in string.ascii_uppercase if os.path.isdir(f"{d}:\\")]
+        for root, depth in roots:
+            base_depth = root.rstrip("\\/").count(os.sep)
+            for dirpath, dirnames, filenames in os.walk(root):
+                if dirpath.rstrip("\\/").count(os.sep) - base_depth >= depth:
+                    dirnames[:] = []
+                dirnames[:] = [d for d in dirnames if not d.startswith(".") and d.lower() not in
+                               ("windows", "program files", "program files (x86)", "programdata",
+                                "appdata", "$recycle.bin", "node_modules", "__pycache__")]
+                if "tiger.py" in filenames:
+                    add(dirpath)
+    found.sort(key=lambda p: not os.path.isdir(os.path.join(p, "models")))
+    return found
+
+
+def choose_tiger_folder(hints=(), skip=()):
+    print("Looking for your Tiger folder...")
+    found = find_tiger_folders(hints, skip)
+    if len(found) == 1:
+        if _ask(f"Update the Tiger in {found[0]}? [Y/n] "):
+            return found[0]
+    elif found:
+        print("Found more than one Tiger folder:")
+        for i, p in enumerate(found, 1):
+            note = "" if os.path.isdir(os.path.join(p, "models")) else "   (not set up)"
+            print(f"  {i}. {p}{note}")
+        ans = input("Which one do you use? Type its number: ").strip()
+        if ans.isdigit() and 1 <= int(ans) <= len(found):
+            return found[int(ans) - 1]
+    try:
+        ans = input("Type or paste the path of your Tiger folder (the one with tiger.py in it): ")
+    except EOFError:
+        return None
+    ans = ans.strip().strip('"')
+    return os.path.abspath(ans) if _is_tiger(ans) else None
+
+
+def close_tiger(base_dir, timeout=10):
+    """Ask a running Tiger to close. Newer versions obey a request from this folder; older ones
+    (before the Updates tab) are closed by their window title. Returns True once it's closed."""
+    try:
+        config_store.send_request(base_dir, "quit")
+    except OSError:
+        pass
+    end = time.time() + timeout / 2
+    while time.time() < end:
+        if not tiger_running(base_dir):
+            return True
+        time.sleep(0.5)
+    if sys.platform == "win32":
+        for title in ("Tiger Voice Control*", "Tiger"):
+            subprocess.call(["taskkill", "/FI", f"WINDOWTITLE eq {title}", "/T", "/F"],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            time.sleep(1)
+            if not tiger_running(base_dir):
+                return True
+    end = time.time() + timeout / 2
+    while time.time() < end:
+        if not tiger_running(base_dir):
+            return True
+        time.sleep(0.5)
+    return False
+
+
 def run(base_dir, zip_path=None, assume_yes=False):
     print("Tiger updater")
     print("=============")
     print(f"Tiger folder: {base_dir}\n")
+    if not os.path.isfile(os.path.join(base_dir, "tiger.py")):
+        print("That folder doesn't have Tiger in it (no tiger.py). Nothing was changed.")
+        return 1
 
-    latest = None if zip_path else latest_commit()
+    latest = latest_commit()
     if latest:
         print(f"Latest version on GitHub: {latest['date']}  {latest['message']}")
         if is_current(base_dir, latest):
@@ -228,14 +323,19 @@ def run(base_dir, zip_path=None, assume_yes=False):
 
     was_running = tiger_running(base_dir)
     if was_running:
-        print("\nTiger is running. Close its window (the one titled \"Tiger Voice Control\"),")
-        print("and this will carry on by itself. Press Ctrl+C to cancel.")
-        try:
-            while tiger_running(base_dir):
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print("\nCancelled. Nothing was changed.")
-            return 1
+        print("\nTiger is running, so it needs to close for the update.")
+        if assume_yes or _ask("Close Tiger now? It will be started again afterwards. [Y/n] "):
+            print("Closing Tiger...")
+            close_tiger(base_dir)
+        if tiger_running(base_dir):
+            print("Please close Tiger's window (titled \"Tiger Voice Control\"); this will carry on")
+            print("by itself. Press Ctrl+C to cancel.")
+            try:
+                while tiger_running(base_dir):
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                print("\nCancelled. Nothing was changed.")
+                return 1
         time.sleep(1)
         print("Tiger is closed.")
 
@@ -243,6 +343,13 @@ def run(base_dir, zip_path=None, assume_yes=False):
         if zip_path:
             with open(zip_path, "rb") as f:
                 summary = apply_update(base_dir, f.read())
+            if latest:
+                save_version(base_dir, latest)
+            if summary["packages"]:
+                flags = 0x08000000 if sys.platform == "win32" else 0
+                summary["packages_ok"] = subprocess.call(
+                    [sys.executable, "-m", "pip", "install", "-r",
+                     os.path.join(base_dir, "requirements.txt")], creationflags=flags) == 0
         else:
             print("\nDownloading the latest version...")
             summary = download_and_install(base_dir, latest)
