@@ -34,6 +34,7 @@ class PurePlayClient:
         self.ws = None
         self.connected = asyncio.Event()
         self.scopes = []
+        self.pairing_pending = False      # waiting for someone to approve Tiger in Pureplay
         self._ids = itertools.count(1)
         self._pending = {}                # id -> Future (responses and requested snapshots)
         self._server_instance = None
@@ -77,6 +78,7 @@ class PurePlayClient:
                 log.debug("Connection problem: %s", e)
             finally:
                 self.connected.clear()
+                self.pairing_pending = False
                 self.ws = None
                 for fut in self._pending.values():
                     if not fut.done():
@@ -136,9 +138,11 @@ class PurePlayClient:
                 log.warning("Pureplay API version %s; Tiger was built for version 1", data.get("version"))
 
         elif mtype == "pairing.pending":
+            self.pairing_pending = True
             self._status("Approve 'Tiger Voice Control' on the Pureplay screen (60 seconds).")
 
         elif mtype == "paired":
+            self.pairing_pending = False
             self._save_token(data.get("token"))
             self.scopes = data.get("scopes") or []
             await self._send({"type": "subscribe", "id": "sub",
@@ -206,6 +210,16 @@ class PurePlayClient:
             self._pending.pop(rid, None)
 
     # ---------- public API ----------
+    async def repair(self):
+        """Forget the saved pairing and connect again, so Pureplay asks for approval."""
+        self._forget_token()
+        self.scopes = []
+        ws = self.ws
+        if ws is not None:
+            await ws.close()
+        self._status("Forgot the old pairing. Approve 'Tiger Voice Control' in Pureplay and "
+                     "choose 'Aim and club'.")
+
     @property
     def is_read_only(self):
         """Paired, but Pureplay granted read-only (no aim/club control)."""

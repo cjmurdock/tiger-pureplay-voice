@@ -177,6 +177,47 @@ PREFIXES = ["", "give me a", "give me the", "could you give me a", "can you give
             "grab me a", "let's go", "use the", "put me on", "please"]
 
 
+# Words that mean "this is about Tiger's voice" (so "switch to Linda" changes voice).
+VOICE_CUES = {"voice", "voices", "switch", "change", "use", "try", "talk", "speak", "sound",
+              "hear", "be", "like", "swap"}
+TALK_WORDS = {"talk", "talking", "speak", "speaking", "voice", "speech", "say", "read"}
+
+VOICE_EXAMPLES = ["next voice", "different voice", "another voice", "try another voice",
+                  "change your voice", "change voices", "switch voices", "new voice",
+                  "what voices do you have", "which voices do you have", "list the voices",
+                  "list voices", "what voices are there", "what voice is this",
+                  "talk faster", "talk slower", "speak faster", "speak slower",
+                  "talk a little faster", "talk a little slower", "talk a bit faster",
+                  "talk a bit slower", "slow down", "slow down a bit", "speed up your voice",
+                  "speak up", "louder", "talk louder", "speak louder", "a little louder",
+                  "quieter", "talk quieter", "speak quieter", "a little quieter", "softer",
+                  "speak softer", "not so loud", "volume up", "volume down",
+                  "turn your voice up", "turn your voice down", "turn up your voice",
+                  "turn down your voice"]
+VOICE_NAME_PREFIXES = ["", "switch to", "switch voice to", "switch the voice to", "change to",
+                       "change voice to", "change your voice to", "change the voice to",
+                       "use", "use the voice", "try", "let me hear", "talk like", "voice",
+                       "be", "switch to the voice", "i want", "give me"]
+
+
+def voice_words(names):
+    """{'linda': 'Linda', 'mark': 'Mark', ...} from voice names like those in Tiger Settings.
+
+    Only the first word of each name is listened for; names that clash with command words
+    (a voice called "Driver", say) are skipped so they can't steal a command.
+    """
+    reserved = set(FILLERS) | set(CLUB_LOOKUP) | NUMBER_WORDS | LITTLE | LOTS | \
+        {w for phrases, _ in HOTKEY_INTENTS for p in phrases for w in p.split()} | \
+        {w for c in CLUB_LOOKUP for w in c.split()} | VOICE_CUES | TALK_WORDS
+    out = {}
+    for name in names:
+        word = "".join(ch for ch in name.split()[0].lower() if ch.isalpha() or ch == "'") \
+            if name.split() else ""
+        if word and word not in reserved and word not in out:
+            out[word] = name
+    return out
+
+
 @dataclass
 class Command:
     action: str
@@ -188,11 +229,16 @@ class Command:
 class Vocabulary:
     wake_word: str = "tiger"
     examples: list = field(default_factory=list)
+    voices: dict = field(default_factory=dict)     # spoken word -> voice name
 
     @classmethod
-    def build(cls, wake_word="tiger"):
-        v = cls(wake_word=wake_word.lower().strip())
+    def build(cls, wake_word="tiger", voice_names=()):
+        v = cls(wake_word=wake_word.lower().strip(), voices=voice_words(voice_names))
         ex = v.examples
+        ex += VOICE_EXAMPLES
+        for word in v.voices:
+            for p in VOICE_NAME_PREFIXES:
+                ex.append(f"{p} {word}".strip())
         clubs = list(CLUB_LOOKUP)
         for p in PREFIXES:
             for c in clubs:
@@ -247,7 +293,7 @@ class Vocabulary:
         words = [w for w in text.lower().split() if w != "[unk]"]
         for i in range(len(words) - 1, -1, -1):
             if words[i] == self.wake_word:
-                cmd = interpret(words[i + 1:])
+                cmd = interpret(words[i + 1:], self.voices)
                 if cmd:
                     return cmd
         return None
@@ -258,13 +304,21 @@ def _has(text, *phrases):
     return any(f" {p} " in padded for p in phrases)
 
 
-def interpret(tokens):
-    """Map the words after the wake word to a Command, or None."""
+def interpret(tokens, voices=None):
+    """Map the words after the wake word to a Command, or None.
+
+    voices: {spoken word: voice name} for the voices installed on this PC.
+    """
     if not tokens:
         return None
     text = " ".join(tokens)
     toks = set(tokens)
     C = lambda a, arg=None: Command(a, arg, text)
+
+    # Tiger's own voice: which one, speed, volume
+    voice_cmd = _interpret_voice(text, tokens, toks, voices or {})
+    if voice_cmd:
+        return C(*voice_cmd)
 
     # program control
     if _has(text, "go to sleep", "stop listening"):
@@ -334,6 +388,31 @@ def interpret(tokens):
     for phrases, name in HOTKEY_INTENTS[10:]:
         if _has(text, *phrases):
             return C("hotkey", name)
+    return None
+
+
+def _interpret_voice(text, tokens, toks, voices):
+    named = [voices[t] for t in tokens if t in voices]
+    if named and (toks & VOICE_CUES or len(tokens) == 1):
+        return ("voice_set", named[-1])
+    if _has(text, "what voices", "which voices", "list voices", "list the voices",
+            "what voice is this", "voices do you have", "voices are there"):
+        return ("voice_list", None)
+    if (toks & {"voice", "voices"}) and toks & {"next", "different", "another", "new", "change",
+                                                "switch", "other"} \
+            and not toks & {"up", "down", "faster", "slower", "louder", "quieter"}:
+        return ("voice_next", None)
+    talking = bool(toks & TALK_WORDS)
+    if (toks & {"faster", "quicker"} and talking) or _has(text, "speed up your voice"):
+        return ("voice_speed", 1)
+    if (toks & {"slower"} and talking) or _has(text, "slow down"):
+        return ("voice_speed", -1)
+    if toks & {"louder"} or _has(text, "speak up", "volume up", "turn your voice up",
+                                 "turn up your voice"):
+        return ("voice_volume", 1)
+    if toks & {"quieter", "softer"} or _has(text, "not so loud", "volume down",
+                                            "turn your voice down", "turn down your voice"):
+        return ("voice_volume", -1)
     return None
 
 

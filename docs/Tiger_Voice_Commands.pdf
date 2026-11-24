@@ -1,93 +1,1797 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document (opensource)
+%âãÏÓ
 1 0 obj
 <<
-/F1 2 0 R /F2 3 0 R
+/Producer (ReportLab PDF Library \055 \050opensource\051)
+/Author (\050anonymous\051)
+/CreationDate (D\07220261116181506\05507\04700\047)
+/Creator (\050unspecified\051)
+/Keywords ()
+/ModDate (D\07220261116181506\05507\04700\047)
+/Subject (\050unspecified\051)
+/Title (Tiger Voice Commands)
+/Trapped (\057False)
 >>
 endobj
 2 0 obj
 <<
-/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+/Type /Pages
+/Count 2
+/Kids [ 4 0 R 9 0 R ]
 >>
 endobj
 3 0 obj
 <<
-/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+/Type /Catalog
+/Pages 2 0 R
 >>
 endobj
 4 0 obj
 <<
-/Contents 9 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/Contents 5 0 R
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 7 0 R
+/F2 8 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
 >>
 endobj
 5 0 obj
 <<
-/Contents 10 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/Length 11477
 >>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+BT /F1 8 Tf 9.6 TL ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 43.2 32.4 Tm (Tiger voice control for Pureplay \267 Settings live in C:\\Tiger\\config.json) Tj T* ET
+BT 1 0 0 1 543.448 32.4 Tm (Page 1) Tj T* ET
+Q
+q
+1 0 0 1 49.2 724.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 -2 Tm /F2 24 Tf 22 TL 123.432 0 Td (Tiger Voice Commands) Tj T* -123.432 0 Td ET
+Q
+Q
+q
+1 0 0 1 49.2 706.4 cm
+q
+BT 1 0 0 1 0 3.5 Tm 14 TL /F1 10.5 Tf .333333 .333333 .333333 rg (Voice control for Pureplay. Start every request with ) Tj /F2 10.5 Tf (\223Tiger\224) Tj /F1 10.5 Tf (, then ask naturally.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 49.2 698.4 cm
+Q
+q
+1 0 0 1 43.2 581.4 cm
+q
+.121569 .435294 .262745 rg
+n 0 117 525.6 -18 re f*
+.917647 .956863 .933333 rg
+n 0 99 525.6 -99 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 102.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (How to talk to Tiger) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 84.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger\224 first) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 84.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Nothing happens without it, so talking about your 7 iron with friends is safe.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 67 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Ask your way) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Polite words are ignored. \223Tiger, seven iron\224, \223Tiger, give me a seven iron\224 and \223Tiger, could you give) Tj T* (me a seven iron please\224 all work.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Numbers) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Say them the golf way \(\223one fifty\224, \223one oh five\224\) or in full \(\223a hundred and fifty\224\).) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Mid-sentence works) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (\223Nice shot. Tiger, eight iron.\224 Tiger acts on what follows its name.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (When it says no) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Aim and club can't change while the ball is in flight or it's not anyone's turn. Tiger tells you why.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+1 1 1 RG
+.4 w
+n 0 81.5 m 525.6 81.5 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 577.4 cm
+Q
+q
+1 0 0 1 49.2 552.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Clubs) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 380.9 cm
+q
+.121569 .435294 .262745 rg
+n 0 168.5 525.6 -17.5 re f*
+1 1 1 rg
+n 0 151 525.6 -40.5 re f*
+.917647 .956863 .933333 rg
+n 0 110.5 525.6 -29 re f*
+1 1 1 rg
+n 0 81.5 525.6 -29 re f*
+.917647 .956863 .933333 rg
+n 0 52.5 525.6 -17.5 re f*
+1 1 1 rg
+n 0 35 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 154 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 154 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 154 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 136.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Pick a club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 113.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 25.5 Tm /F1 9 Tf 11.5 TL (give me a seven iron \267 can I get the driver \267 I'll hit a pitching) Tj T* (wedge \267 let's go with a three wood \267 hand me a sand wedge \267) Tj T* (putter please) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 136.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Selects that club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 96 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Club for a distance) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 84.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (what should I hit from one fifty \267 club for a hundred and twenty \267) Tj T* (what club for one oh five \267 I've got one forty) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 96 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Picks from your carry distances) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 67 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Club for this shot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 67 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (what club should I hit \267 what should I hit \267 club for the pin) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Uses the current distance \(putter) Tj T* (on the green\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Pureplay's suggestion) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (suggest a club \267 reset the club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Back to Pureplay's pick) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Step through the bag) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (next club \267 previous club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (One club at a time) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Club up / down) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (club up \267 club down) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Pureplay keys I / K) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 168.5 m 525.6 168.5 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 168.5 l S
+n 525.6 0 m 525.6 168.5 l S
+n 0 151 m 525.6 151 l S
+n 0 110.5 m 525.6 110.5 l S
+n 0 81.5 m 525.6 81.5 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 168.5 l S
+n 381.6 0 m 381.6 168.5 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 355.9 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Aim) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 247.9 cm
+q
+.121569 .435294 .262745 rg
+n 0 105 525.6 -17.5 re f*
+1 1 1 rg
+n 0 87.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 70 525.6 -17.5 re f*
+1 1 1 rg
+n 0 52.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 35 525.6 -17.5 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Nudge) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (aim left \267 aim right) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (2 degrees) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Small / big nudge) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (aim a little left \267 aim a bit right \267 aim a lot left) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (1 degree / 5 degrees) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Exact degrees) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (aim right three degrees \267 aim left ten \267 move it right five) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (1 to 45 degrees) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (At the cup) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (aim at the pin \267 aim at the flag \267 line me up on the flag) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Aims straight at the hole) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Reset) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (reset the aim \267 aim reset) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Pureplay's default aim) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 105 m 525.6 105 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 105 l S
+n 525.6 0 m 525.6 105 l S
+n 0 87.5 m 525.6 87.5 l S
+n 0 70 m 525.6 70 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 105 l S
+n 381.6 0 m 381.6 105 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 222.9 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Game flow) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 114.9 cm
+q
+.121569 .435294 .262745 rg
+n 0 105 525.6 -17.5 re f*
+1 1 1 rg
+n 0 87.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 70 525.6 -17.5 re f*
+1 1 1 rg
+n 0 52.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 35 525.6 -17.5 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Mulligan) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (take a mulligan \267 mulligan \267 do over) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Ctrl + M) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Skip player) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (skip player \267 skip) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (F7) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Fast forward) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (fast forward \267 speed up) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Space) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Tee position) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (move the tee left \267 tee right) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (C / V) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Switch hands) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (switch hands \267 change hands) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (N) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 105 m 525.6 105 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 105 l S
+n 525.6 0 m 525.6 105 l S
+n 0 87.5 m 525.6 87.5 l S
+n 0 70 m 525.6 70 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 105 l S
+n 381.6 0 m 381.6 105 l S
+Q
+Q
+Q
+ 
+
+Q
+q
+0.0 0.0 612 792 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+1 1 1 rg
+n
+155 28 220 11 re
+f*
+0.333333 0.333333 0.333333 rg
+BT
+/F1-0 8 Tf
+9.6 TL
+ET
+BT
+1 0 0 1 156.1 32.36 Tm
+(\267  Change settings with Tiger Settings\056bat \050voice\054 mic\054 distances\051) Tj
+T*
+ET
+Q
+
+endstream
 endobj
 6 0 obj
 <<
-/PageMode /UseNone /Pages 8 0 R /Type /Catalog
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 7 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20261116181506-07'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20261116181506-07'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (Tiger Voice Commands) /Trapped /False
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 8 0 obj
 <<
-/Count 2 /Kids [ 4 0 R 5 0 R ] /Type /Pages
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 9 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 2540
+/Contents 10 0 R
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 11 0 R
+/F2 8 0 R
+/F2-0 12 0 R
 >>
-stream
-Gb"/)96].!'&MqUbg&tQcibF7Fa'uae!mdce(Qb:BEOG@M229K!48bUhZN?k8sW#&Z532)f]Q?\?8M2t@.4V="?+n_bho?!purB.hBP8q4=5S@bCdjmiTJ87f3-oClAgQUYM1Y\r4q9h8G**bYO8re"0SD#/)^8dVF83UV\+K91F78U#oE*1'P*cp/M*H<!"VIHb#/O+I3q2sh#1lr1fKaaLpMc3eecH])gM8^O$@;`3Wa`U[6-+tao$fj!iRpMce6oQX5:^6+E4]q;).r/Z]Kh;q#W+noppdAQ8<^dcTa,+L3JYaqrYQoNi-<**/t;G>g%1/Yi.<SN;[RO^#MP4=Y(LLhX(b09"e3ISi:EOa`]7C$V/3&`auSr8R?XNk7P6'HkLK.*Y]@sa>4E4&EIUuUk0%U)&R4uOc>%[V;o(N-QL1-]6=Te^BKl7#$A$Y@9!Z)k?D^4qA32X(L^n:?B:*b5=?aO_XmsFJFE9a*8[A#"G,WhRC,;rg^Co$q"&ImK!f:0;bpOIRMh#P4i91p.o05IR@W9Cqk2>S%`ifE^JYMlr]Q2NVt,tiDIHR3]&@kCr\*/Zih18)d[p`eP5riNoGT_qm7,0B0Uo'%/4c_$lD,h]!p^fDT`]</>\0.rOQ#l$0PSCZQO9[;$aMNhGN1(,\E0Q;!3"hWMR,]I_I<gNK#@sU*AMW&#F")UQ)dOD#&a`#nGReEOEV[r:HYP4^kRbL!YtoPb.&S![I_:?OQ;f`A%D<TgMU)mP?gHS*t/4pipO=4Q[,Zl0f'_XXq,-]3[\$mC4SM!C9@>OFi-e\hNu1p&TRm"Oc(;*Waf.BUsOT6ja!T6#>:863$XO36u@--l6`)g6D'7jb;[4j5!>&acg+^NZBE1Y`!4_7rpic*1la_=%t:>E4%Ye`/2D4M)T$3qUdLrbD>-*-bD[qZl:<'Tc'4%hbJZ\h+Q5j_coWnu$5/rnHm=1l#n.W`>L/iC_Vb2TTF)t$8mm#p;C7f]9+0e,-nh28_X'l\P[TjjfOQfd-@VQY/tgVq6uIP&d@m_M;@5,4E^m2WW)Bi<5Yr`PV:fRPm-$1tlO:Urq?6TZQ^QsO`Z-V)<ii51)"Wj,KB_os:60[6HJDf<]5'i$B=rN:4b"M78GsYjEfc_2ht^<%j6bWYh!/iKTu$RX0:u"[ECKUggKKOt\EBRI[n!ncY<%Qq6e)V9;)?.sgE?[^4#3>%T&qSaX_Snt3+?8uj0A]6h.%[ae.%G@q^n&NpEgK8^NCGK0ojou4d[^/O,W:5D>Po74=8;^c]MfjWej8B3^`=_@UB(&UD71#D2&$HS#9&:Ik%?:UB=MA'O_1f+=51k[91dg,-%4F=*Y8n<IeLP<MUL8b7?KV:.[;o-T^Xk]HU]"<$mDbTQj`7B0)A[U@l"Ob]^76W>#q%`u&jWBUiG"s!/ugYYs2K]kG`#0q[N!S]shcKH[3j@2>ClB,j?(71[X_.l0QL4r>XnJeuf)R+f#2IC`*@D$[1tll=`P@`EW5:D4,^RP_!9!Z1,Yn#cLE'#>BkQUWK.fjY51KSA'e@.nHQM,_33REBWbOR]$G2,_^sLDbL6]Ons-l-+SEl&E6NC]O")Q,`hLO[_`<$:1%od=u5G1YX&2X<PuB&@QuXqY\+=7(AC&b;:MC;1@6cZ`8S&rAsILJ.!Re1t\9=._$kKr<Yuk<:?3cVU=ZA"iGs:CRpH1R:\<j9eTL%0_1:i+Lr9KRIX79!HPKi5?R"q^tOd*(8mA`e8iH;LN3h_&G+.S,YkWhW^Z9_I'9J0pnf@hk$E-u[Ltd>%K(CT%'bC<FBfohYbKcNLeof"pBm+ADn#CmH"oq\]5>%Og?cLmc%tCqBWBq_ph88sfQc.\SsmAd(J>/J6FG+h\$""of^r2$G'ul=/D'VdPVsaZWEWQu(K-80N%Ljl_6P=K?=F<W-@n=emYR*?@,7SHdXKknG"K'F-XP5M92.6GaL%]*4I_)+U0q0Y]eADfLcLN$qCi.`>!PiGRUYM/Ts&A=E1/3!JXC,Ve-FA4D*..T6Jk)b^_9FnN<!e%TOX'laJi&t3PZ-B'3,d!h8Ys81[n)XH;YteisIa'O+;I!)u]RS*3$d9cXNSbr7+eg/Sp3=JQn8J<\Lt3K@p6rF=uoeQ_YhM:q\U1:*umJ2:4&.Q_L9&'NJ'oFi(J"96-QR(DrC)]9.+CFb-=b0#_"4Bd#blJW11UAMTjl5'd*"QSTH:XLgej"1l[O]`MPn\R%j`8V5,jBn>H0=1cB<lqt^O5"Ss?o><1t%"f&7%!E9cqsq,D5"SB6*_P]WcKe?U?Z;\t'ArEq;hVgP`:Q,GrBDF%+3QdE.3?&,Qq/#.?Kl7rU)$Y!q0Pml#QENM59=IbeN5'tp^o\rKWVE@)KZ>T;>s7\.X*'dY]RdZ.-UQdoa0f./G2)HZ,%Wu%,X`>&o*BVKZ)6T_Tj?g%r9tl$KMWlpdb[l\YLH&LaOu9_mVGE;5@Fjkbg-mj(,]EE!)_>SIIc!oK,2,2K#adRC<&T!p\OalG"\B7@ljSn%UZo=($P4q\QM-)S5~>endstream
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
 endobj
 10 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1871
+/Length 12992
 >>
 stream
-Gb"/)bAu>q']&(*m`nS)AI.e]>om#$N2LYFFY]N8"stLU#p0KS>1MMS!:V/T&kQ#"V@1F#0aSEcJ;4q#pQ.jPJdG!H+(bNAk3uu?!+D6J!SN2:o3;!<55?q4H@4BX(iIlA=R%!ps(3cA!*.E`bJ7Lo)(gL,H*X.Q*f;5=&/Mfa71.4i_-P1H3[J!4@+U#K'dCb$*7Eo!6B]7`h\HSWFKl+0I$q'pDnO.u_>G7r?d$"H!'7Q"fXB[HhN8NV]Q<V0acB"L]thGA@Ge:4bU,P$#/\H$"#+Q7_1<%"G-P[AHT,MfD)a<GRjePPal=Zi?P7GYSn+(J7rXLh,p+`t#6<n,JE_T:*Q*S<O_6Yh-nJ_$&BLL/&mr(3]uC>>kLpsoJ`HU0"\-j$*]_A!qr0Y]9O+WB^?G'69gt0+=ll?V8B":=edT,$R"hBhCB?_H34OArJI7!>__#,CNJW1&;8S(KiohURa>6QkRAi$_Q:fe:@"D$bJ['V;cLOb_;tguiopY%@.#&,$V5*M-4<XJWh%gNcol)cB38+`]'gQ0+&bO4Qp:tCF7`'TATZ;%eqO^OpL][!9ReDh"(h/!O9+<%RWaIY^pE][NgY,$JBQ1G51s6t0g"Rd)Fcl=!^k(J=B2!WhCJ%'NT3<7o@.U`^lCY\cAhZtM/e-oV1tJS-e/?;)_RP+RAWPCA@.K8OB*^bf53&s3d!GOF61A`#GeT4j#7Os@!/?Prk;r+aa,+6BVC;bU8j)3T$8^4M2Qc,:2KS&]])U-%<C>7VlD3k<g&YM!>L`q#]/lp<XL?r">L@>9eAaua<HHSYm@5`Bma4OIc^4TV8euA@i1.!$RtZfEBrS,jC^1KQi9];m$fOsZek9k)TJf3jq$G%!Ga*3uiJDd/?QLD4S<hL<K$f[aW/n06nb;cN*Z#d:W"LXfA*F>VpHhs:NJ*mIckVMiq&;p/A7RjUHouJuE>;hZPYuM?JQ'g#gkWT37%T86chZtK8%BAPMC!]H2:<,=ReW>U:8F)ta2^i?O*B"^#Y(!Lpt@pZI,)1BRNfR=8D/!q'E,obS_nDAr;GS0<[05t]SViN>%;]5g:4/Kb8?A29DFUPP_cj$muOm[)]`6`Zq9gPC.8<]T&"a@*l,t/X[/f+oPR^C!b!@L^keZ6H'tPF<DD1X()(+*WqDaEop*0<o*?s[>VsG7+al$lp\Ngo14q."b<nA.1Q7=,@n^][Lp:ZsH=C]6`p;'al+su4jd;J4hjC,"5+\.8Wop#mZE\U;1\@N>>U2b`@8X_N-TU'\`h=daUdZ.Q??J=Ub<c<%;IK1N"4(]K!=jjP%bj-#k00^?o7)AT(_&7GEh%;KrJncaUUK+l#o=itBb+>KUH]@_@KT8$ku3"nE(EAC=YZ$R[FFk$@?LJnUtVTX=_UXuTNf^'IAF.q/E6>L]60:Sid+1qJ0L=325mZi44^/7(*;r8qQt0CkX1;m%/tdU8Fk:UQF!^eGUM&Ja%02h,tVAU\Z80QA&a4+OB4%#Fbc]O/LK>@N6tlqR$RI_W@9*H._6rc:=L([9lDuor01An7^dW&W!O`[,a:Sgo'!G)+g;m<%'0IU6?CP'Ks3@:8P15mcAm-"iM_+Qa`@WuJ_AZDWoKb">Gca2q7]R(Z/@+D[<a3Pdra9FfGG(r3rPf*08eR)?0C-WoK(Ou*>P'V(?/$T4B7/c$`9!.^)(-debQ)`.(nYHeGoXdf/][iI-mg)gdXcU25nhoQOr@B;K<+_J5KWb(K0Nu+iTVBPZD]=\L?$j-="p1Q#?/`p+nj4Z9RO:(9T-G/(bR&4,6P#Uod`428QU,p'janhV!q<b*]'l[d&F*.(+`,\;2nU&R^hk>lNskh#RD?AF#Jo#kLu'L<4pa!j4B~>endstream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+BT /F1 8 Tf 9.6 TL ET
+.333333 .333333 .333333 rg
+BT 1 0 0 1 43.2 32.4 Tm (Tiger voice control for Pureplay \267 Settings live in C:\\Tiger\\config.json) Tj T* ET
+BT 1 0 0 1 543.448 32.4 Tm (Page 2) Tj T* ET
+Q
+q
+1 0 0 1 49.2 728.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Camera) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 620.4 cm
+q
+.121569 .435294 .262745 rg
+n 0 105 525.6 -17.5 re f*
+1 1 1 rg
+n 0 87.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 70 525.6 -17.5 re f*
+1 1 1 rg
+n 0 52.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 35 525.6 -17.5 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 90.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Flyover) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (do a flyover \267 flyover) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (O) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Fly to ball) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (fly to the ball \267 back to the ball) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (6) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Aim point) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (aim point) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (F3) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Fly to aim point) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (fly to the aim point) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (J) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (First person) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (first person) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (F6) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 105 m 525.6 105 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 105 l S
+n 525.6 0 m 525.6 105 l S
+n 0 87.5 m 525.6 87.5 l S
+n 0 70 m 525.6 70 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 105 l S
+n 381.6 0 m 381.6 105 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 595.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Screens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 452.4 cm
+q
+.121569 .435294 .262745 rg
+n 0 140 525.6 -17.5 re f*
+1 1 1 rg
+n 0 122.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 105 525.6 -17.5 re f*
+1 1 1 rg
+n 0 87.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 70 525.6 -17.5 re f*
+1 1 1 rg
+n 0 52.5 525.6 -17.5 re f*
+.917647 .956863 .933333 rg
+n 0 35 525.6 -17.5 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 125.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 125.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 125.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 108 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Scorecard) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 108 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (show me the scorecard \267 scorecard) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 108 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (T) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 90.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Heat map) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 90.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (heat map \267 let's see the heat map) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 90.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Y) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Green grid) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (green grid \267 grid) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 73 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (G) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Ball trails) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (ball trails \267 tracers) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 55.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (F1) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (HUD) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (hud \267 hide the hud \267 show the hud) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (H) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Weather) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (weather \267 wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (L) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Other) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (show FPS \267 frame rate \267 full screen \267 shortcuts \267 mute \267 sound on) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (F \267 F11 \267 Tab \267 Num minus) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 140 m 525.6 140 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 140 l S
+n 525.6 0 m 525.6 140 l S
+n 0 122.5 m 525.6 122.5 l S
+n 0 105 m 525.6 105 l S
+n 0 87.5 m 525.6 87.5 l S
+n 0 70 m 525.6 70 l S
+n 0 52.5 m 525.6 52.5 l S
+n 0 35 m 525.6 35 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 140 l S
+n 381.6 0 m 381.6 140 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 427.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Questions \(Tiger answers out loud\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 331.4 cm
+q
+.121569 .435294 .262745 rg
+n 0 93 525.6 -17.5 re f*
+1 1 1 rg
+n 0 75.5 525.6 -29 re f*
+.917647 .956863 .933333 rg
+n 0 46.5 525.6 -29 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 61 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Distance) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 61 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (how far \267 how far is it \267 what's the yardage \267 distance) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 49.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Yards to the pin \(feet on the) Tj T* (green\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 32 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Score) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 32 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (how am I doing \267 what's my score) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Score to par and the shot you're) Tj T* (on) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Current club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (what club am I hitting \267 current club) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Says the club in your hands) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 93 m 525.6 93 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 93 l S
+n 525.6 0 m 525.6 93 l S
+n 0 75.5 m 525.6 75.5 l S
+n 0 46.5 m 525.6 46.5 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 93 l S
+n 381.6 0 m 381.6 93 l S
+Q
+Q
+Q
+q
+1 0 0 1 49.2 306.4 cm
+q
+.121569 .435294 .262745 rg
+BT 1 0 0 1 0 4.5 Tm /F2 13.5 Tf 18 TL (Lights and Tiger itself) Tj T* ET
+Q
+Q
+q
+1 0 0 1 43.2 210.4 cm
+q
+.121569 .435294 .262745 rg
+n 0 93 525.6 -17.5 re f*
+1 1 1 rg
+n 0 75.5 525.6 -29 re f*
+.917647 .956863 .933333 rg
+n 0 46.5 525.6 -29 re f*
+1 1 1 rg
+n 0 17.5 525.6 -17.5 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What you want) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Say \223Tiger, \205\224) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 78.5 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (What happens) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 61 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Lights) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 61 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (lights down \267 dim the lights \267 lights up) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 49.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Home Assistant \(needs setting) Tj T* (up first\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 32 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Pause / resume) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 32 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (go to sleep \267 stop listening \267 wake up) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 9 Tf 11.5 TL (Only 'wake up' works while) Tj T* (asleep) Tj T* ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F2 9 Tf 11.5 TL (Help) Tj T* ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (help \267 what can you do) Tj T* ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2.5 Tm /F1 9 Tf 11.5 TL (Tiger reads a few examples) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.788235 .862745 .811765 RG
+.4 w
+n 0 93 m 525.6 93 l S
+n 0 0 m 525.6 0 l S
+n 0 0 m 0 93 l S
+n 525.6 0 m 525.6 93 l S
+n 0 75.5 m 525.6 75.5 l S
+n 0 46.5 m 525.6 46.5 l S
+n 0 17.5 m 525.6 17.5 l S
+n 111.6 0 m 111.6 93 l S
+n 381.6 0 m 381.6 93 l S
+Q
+Q
+Q
+ 
+
+Q
+q
+0.0 0.0 612 792 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+1 1 1 rg
+n
+155 28 220 11 re
+f*
+0.333333 0.333333 0.333333 rg
+BT
+/F1-0 8 Tf
+9.6 TL
+ET
+BT
+1 0 0 1 156.1 32.36 Tm
+(\267  Change settings with Tiger Settings\056bat \050voice\054 mic\054 distances\051) Tj
+T*
+ET
+0.121569 0.435294 0.262745 rg
+BT
+/F2-0 13.5 Tf
+16.2 TL
+ET
+BT
+1 0 0 1 49.2 189.9 Tm
+(Tiger\047s voice) Tj
+T*
+ET
+q
+1 0 0 1 43.2 71.9 cm
+q
+0.121569 0.435294 0.262745 rg
+n
+0 110.5 525.6 -17.5 re
+f*
+1 1 1 rg
+n
+0 93 525.6 -29 re
+f*
+0.917647 0.956863 0.933333 rg
+n
+0 64 525.6 -29 re
+f*
+1 1 1 rg
+n
+0 35 525.6 -17.5 re
+f*
+0.917647 0.956863 0.933333 rg
+n
+0 17.5 525.6 -17.5 re
+f*
+0 0 0 rg
+BT
+/F1-0 10 Tf
+12 TL
+ET
+q
+1 0 0 1 6 96 cm
+q
+1 1 1 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(What you want) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 117.6 96 cm
+q
+1 1 1 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(Say \223Tiger\054 \205\224) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 387.6 96 cm
+q
+1 1 1 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(What happens) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 6 78.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(Pick a voice) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 117.6 67 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 14 Tm
+/F1-0 9 Tf
+11.5 TL
+(switch to Linda \267 use Mark \267 change your voice to Richard \267 let) Tj
+T*
+(me hear Zira) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 387.6 67 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 14 Tm
+/F1-0 9 Tf
+11.5 TL
+(Answers in the new voice and) Tj
+T*
+(keeps it) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 6 49.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(Try another \057 list) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 117.6 49.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F1-0 9 Tf
+11.5 TL
+(next voice \267 different voice \267 what voices do you have) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 387.6 38 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 14 Tm
+/F1-0 9 Tf
+11.5 TL
+(Next installed voice \057 names) Tj
+T*
+(them) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 6 20.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(Speed) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 117.6 20.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F1-0 9 Tf
+11.5 TL
+(talk faster \267 talk slower \267 slow down) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 387.6 20.5 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F1-0 9 Tf
+11.5 TL
+(One step at a time\054 saved) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 6 3 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2-0 9 Tf
+11.5 TL
+(Volume) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 117.6 3 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F1-0 9 Tf
+11.5 TL
+(speak up \267 louder \267 quieter \267 not so loud) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 387.6 3 cm
+q
+0 0 0 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F1-0 9 Tf
+11.5 TL
+(10\045 at a time\054 saved) Tj
+T*
+ET
+Q
+Q
+q
+1 J
+1 j
+0.788235 0.862745 0.811765 RG
+0.4 w
+n
+0 110.5 m
+525.6 110.5 l
+S
+n
+0 0 m
+525.6 0 l
+S
+n
+0 0 m
+0 110.5 l
+S
+n
+525.6 0 m
+525.6 110.5 l
+S
+n
+0 93 m
+525.6 93 l
+S
+n
+0 64 m
+525.6 64 l
+S
+n
+0 35 m
+525.6 35 l
+S
+n
+0 17.5 m
+525.6 17.5 l
+S
+n
+111.6 0 m
+111.6 110.5 l
+S
+n
+381.6 0 m
+381.6 110.5 l
+S
+Q
+Q
+Q
+0.333333 0.333333 0.333333 rg
+BT
+/F1-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 43.2 57.9 Tm
+(Voice names are the ones installed on your PC\056 Tiger Settings\056bat does the same with a preview button\056) Tj
+T*
+ET
+Q
+
+endstream
+endobj
+11 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+12 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
 endobj
 xref
-0 11
+0 13
 0000000000 65535 f 
-0000000061 00000 n 
-0000000102 00000 n 
-0000000209 00000 n 
-0000000321 00000 n 
-0000000514 00000 n 
-0000000708 00000 n 
-0000000776 00000 n 
-0000001063 00000 n 
-0000001128 00000 n 
-0000003759 00000 n 
+0000000015 00000 n 
+0000000347 00000 n 
+0000000412 00000 n 
+0000000461 00000 n 
+0000000694 00000 n 
+0000012224 00000 n 
+0000012331 00000 n 
+0000012438 00000 n 
+0000012550 00000 n 
+0000012798 00000 n 
+0000025844 00000 n 
+0000025952 00000 n 
 trailer
 <<
-/ID 
-[<123da3738c5d8960ff62e3c9900b34d1><123da3738c5d8960ff62e3c9900b34d1>]
-% ReportLab generated PDF document -- digest (opensource)
-
-/Info 7 0 R
-/Root 6 0 R
-/Size 11
+/Size 13
+/Root 3 0 R
+/Info 1 0 R
 >>
 startxref
-5722
+26065
 %%EOF

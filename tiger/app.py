@@ -1,13 +1,14 @@
 """Tiger: voice control for Pureplay golf."""
 import argparse
 import asyncio
-import json
 import logging
 import os
 import sys
 import threading
+import time
 
-from . import keys
+from . import config_store, keys
+from .config_store import ConfigError
 from .commands import Vocabulary, club_spoken, pick_club_for, number_phrases
 from .pureplay_api import PurePlayClient, ApiError
 
@@ -32,12 +33,20 @@ def spoken_number(n):
 
 
 class Tiger:
-    def __init__(self, cfg, base_dir, speaker, dry_run=False):
+    def __init__(self, cfg, base_dir, speaker, dry_run=False, voices=None):
         self.cfg = cfg
         self.base_dir = base_dir
         self.speaker = speaker
         self.dry_run = dry_run
-        self.vocab = Vocabulary.build(cfg.get("wake_word", "tiger"))
+        self.voices = voices or []          # [{'name': 'Linda', 'description': ...}, ...]
+        self.vocab = Vocabulary.build(cfg.get("wake_word", "tiger"),
+                                      [v["name"] for v in self.voices])
+        self.listener = None                # set once the mic is open
+        self.input_mode = "mic"
+        self._cfg_mtime = config_store.config_mtime(base_dir)
+        self._cfg_error = None
+        self._last_message = ""
+        self._api_task = None
         self.sleeping = False
         self.announced_shots = set()
         self.api = PurePlayClient(cfg["pureplay"]["host"], cfg["pureplay"]["port"],
@@ -52,6 +61,7 @@ class Tiger:
     # ---------- plumbing ----------
     def status(self, text):
         print(f"[Tiger] {text}")
+        self._last_message = text
 
     def submit_text(self, text, conf):
         """Called from the listener thread."""
@@ -60,7 +70,8 @@ class Tiger:
     async def run(self):
         self.loop = asyncio.get_running_loop()
         self.queue = asyncio.Queue()
-        asyncio.create_task(self.api.run_forever())
+        self._api_task = asyncio.create_task(self.api.run_forever())
+        asyncio.create_task(self.housekeeping())
         while True:
             text, conf = await self.queue.get()
             await self.handle_text(text, conf)
@@ -69,6 +80,96 @@ class Tiger:
         if self.cfg.get("units", "yards") == "metres" or self.cfg.get("units") == "meters":
             return metres, "metres"
         return metres * M_TO_YD, "yards"
+
+    # ---------- settings: live reload, saving, status for the Settings window ----------
+    async def housekeeping(self):
+        """Once a second: pick up config.json changes, handle Settings window requests and
+        write status.json so the Settings window can show what Tiger is doing."""
+        last_status = 0
+        while True:
+            try:
+                self.reload_config_if_changed()
+                req = config_store.take_request(self.base_dir)
+                if req:
+                    await self.handle_request(req)
+                if time.monotonic() - last_status >= 2:
+                    last_status = time.monotonic()
+                    await asyncio.to_thread(config_store.write_status, self.base_dir,
+                                            self.status_snapshot())
+            except Exception:
+                log.exception("Housekeeping failed")
+            await asyncio.sleep(1)
+
+    def status_snapshot(self):
+        return {
+            "running": True,
+            "connected": self.api.connected.is_set(),
+            "control": self.api.has_control,
+            "read_only": self.api.is_read_only,
+            "pairing_pending": self.api.pairing_pending,
+            "voice": self.speaker.active_voice,
+            "voice_setting": self.cfg.get("voice", {}).get("name"),
+            "mic": self.listener.describe_device() if self.listener else
+                   ("typing (--type)" if self.input_mode == "type" else None),
+            "sleeping": self.sleeping,
+            "config_error": self._cfg_error,
+            "message": self._last_message,
+        }
+
+    def reload_config_if_changed(self):
+        mtime = config_store.config_mtime(self.base_dir)
+        if mtime is None or mtime == self._cfg_mtime:
+            return
+        self._cfg_mtime = mtime
+        try:
+            new = config_store.load_config(self.base_dir)
+            for combo in (new.get("hotkeys") or {}).values():
+                keys.parse_combo(combo)
+            if "hotkeys" not in new or "pureplay" not in new:
+                raise ConfigError("config.json is missing its hotkeys or pureplay section.")
+        except (ConfigError, ValueError, KeyError) as e:
+            if str(e) != self._cfg_error:
+                self.status(f"{e} Still using the previous settings.")
+            self._cfg_error = str(e)
+            return
+        self._cfg_error = None
+        self.apply_config(new)
+
+    def apply_config(self, new):
+        old = self.cfg
+        self.cfg = new
+        ov, nv = old.get("voice", {}), new.get("voice", {})
+        if any(ov.get(k) != nv.get(k) for k in ("name", "rate", "volume", "enabled")):
+            self.speaker.configure(voice_name=nv.get("name") or "", rate=nv.get("rate", 190),
+                                   volume=nv.get("volume", 1.0), enabled=nv.get("enabled", True))
+            print("[Tiger] Voice settings updated.")
+        if (old.get("mic") or {}).get("device") != (new.get("mic") or {}).get("device"):
+            if self.listener is not None:
+                self.listener.set_device((new.get("mic") or {}).get("device"))
+                print("[Tiger] Switching microphone.")
+        if old.get("wake_word") != new.get("wake_word"):
+            self.status("The wake word changes the next time Tiger starts.")
+
+    def save(self, changes):
+        """Save settings changed by voice, keeping the rest of config.json as it is."""
+        try:
+            new = config_store.update_config(self.base_dir, changes)
+        except (ConfigError, OSError) as e:
+            self.status(f"Couldn't save to config.json: {e}")
+            self.speaker.say("I couldn't save that. Check config dot json.")
+            return False
+        self._cfg_mtime = config_store.config_mtime(self.base_dir)
+        self.apply_config(new)
+        return True
+
+    async def handle_request(self, req):
+        action = req.get("action")
+        if action == "repair":
+            await self.api.repair()
+            if self._api_task is not None and self._api_task.done():
+                self._api_task = asyncio.create_task(self.api.run_forever())
+        elif action == "say" and req.get("text"):
+            self.speaker.say(str(req["text"])[:300])
 
     # ---------- recognised speech ----------
     async def handle_text(self, text, conf):
@@ -293,10 +394,63 @@ class Tiger:
         self.sleeping = False
         self.speaker.say("I'm listening.")
 
+    # ---------- Tiger's voice ----------
+    def _voice_named(self, name):
+        name = (name or "").lower()
+        return next((v for v in self.voices if v["name"].lower() == name), None)
+
+    def _current_voice(self):
+        desc = self.speaker.active_voice or ""
+        return next((v for v in self.voices if v["description"] == desc), None)
+
+    async def do_voice_set(self, name):
+        v = self._voice_named(name)
+        if v is None:
+            self.speaker.say(f"I don't have a voice called {name}.")
+            return
+        if self.save({"voice.name": v["name"]}):
+            self.speaker.say(f"This is {v['name']}.")
+
+    async def do_voice_next(self, _):
+        if len(self.voices) < 2:
+            self.speaker.say("This is the only voice on this PC.")
+            return
+        cur = self._current_voice()
+        i = self.voices.index(cur) if cur in self.voices else -1
+        await self.do_voice_set(self.voices[(i + 1) % len(self.voices)]["name"])
+
+    async def do_voice_list(self, _):
+        if not self.voices:
+            self.speaker.say("I can't see the voices on this PC.")
+            return
+        names = [v["name"] for v in self.voices]
+        listed = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+        cur = self._current_voice()
+        self.speaker.say(f"I have {listed}." + (f" I'm {cur['name']}." if cur else ""))
+
+    async def do_voice_speed(self, direction):
+        from .audio import rate_to_step, step_to_rate, RATE_MIN_STEP, RATE_MAX_STEP
+        step = rate_to_step(self.cfg.get("voice", {}).get("rate", 190))
+        new = max(RATE_MIN_STEP, min(RATE_MAX_STEP, step + direction))
+        if new == step:
+            self.speaker.say("That's as fast as I go." if direction > 0 else "That's as slow as I go.")
+            return
+        if self.save({"voice.rate": step_to_rate(new)}):
+            self.speaker.say("Faster." if direction > 0 else "Slower.")
+
+    async def do_voice_volume(self, direction):
+        vol = float(self.cfg.get("voice", {}).get("volume", 1.0))
+        new = round(max(0.1, min(1.0, vol + 0.1 * direction)), 2)
+        if new == round(vol, 2):
+            self.speaker.say("That's as loud as I go." if direction > 0 else "That's as quiet as I go.")
+            return
+        if self.save({"voice.volume": new}):
+            self.speaker.say("Louder." if direction > 0 else "Quieter.")
+
     async def do_help(self, _):
         self.speaker.say("Just ask naturally. For example: give me a seven iron, aim a little left, "
                          "aim at the pin, what should I hit from one fifty, take a mulligan, "
-                         "do a flyover, how far, or how am I doing.")
+                         "do a flyover, how far, how am I doing, or talk faster.")
 
     # ---------- game events ----------
     async def on_event(self, name, data):
@@ -358,8 +512,11 @@ class Tiger:
 
 # ---------------------------------------------------------------------------
 def load_config(base_dir):
-    with open(os.path.join(base_dir, "config.json"), "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        return config_store.load_config(base_dir)
+    except ConfigError as e:
+        print(e)
+        sys.exit(1)
 
 
 def main(argv=None):
@@ -373,7 +530,13 @@ def main(argv=None):
     ap.add_argument("--list-voices", action="store_true", help="show installed voices and exit")
     ap.add_argument("--say", metavar="TEXT", help="speak TEXT with the configured voice and exit")
     ap.add_argument("--voice", metavar="NAME", help="voice to use (overrides config.json)")
+    ap.add_argument("--settings", action="store_true", help="open the Tiger Settings window")
     args = ap.parse_args(argv)
+
+    if args.settings:
+        from .settings_window import main as settings_main
+        settings_main(base_dir)
+        return
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO,
                         format="%(asctime)s %(name)s: %(message)s", datefmt="%H:%M:%S")
@@ -405,19 +568,31 @@ def main(argv=None):
             main._mutex = _mutex                 # keep the handle alive
 
     cfg = load_config(base_dir)
-    from .audio import Speaker, Listener
+    from .audio import Speaker, Listener, voice_info
     v = cfg.get("voice", {})
+    messages = []
     speaker = Speaker(v.get("enabled", True), v.get("rate", 190), v.get("volume", 1.0),
-                      args.voice or v.get("name"))
+                      args.voice or v.get("name"), on_message=messages.append)
     if args.say:
         speaker.say(args.say)
         speaker.wait_until_done()
+        for m in messages:
+            print(m)
         return
-    tiger = Tiger(cfg, base_dir, speaker, dry_run=args.dry_run)
+    try:
+        voices = voice_info()
+    except Exception as e:      # not Windows / no pywin32
+        log.debug("Can't list voices: %s", e)
+        voices = []
+    tiger = Tiger(cfg, base_dir, speaker, dry_run=args.dry_run, voices=voices)
+    speaker.on_message = tiger.status
+    for m in messages:
+        tiger.status(m)
     stop = threading.Event()
 
     def start_input():
         if args.type:
+            tiger.input_mode = "type"
             print(f"Type commands (e.g. '{tiger.vocab.wake_word} seven iron'). Ctrl+C to quit.")
             def typer():
                 for line in sys.stdin:
@@ -443,6 +618,7 @@ def main(argv=None):
             listener = Listener(model, tiger.vocab.grammar(), on_text,
                                 device=mic.get("device"), sample_rate=mic.get("sample_rate", 16000),
                                 speaker=speaker)
+            tiger.listener = listener
             threading.Thread(target=listener.run, args=(stop,), daemon=True).start()
         print(f"Tiger is ready. Say '{tiger.vocab.wake_word}' then a command.")
 
@@ -455,3 +631,5 @@ def main(argv=None):
     except KeyboardInterrupt:
         stop.set()
         print("Bye.")
+    finally:
+        config_store.write_status(base_dir, {"running": False})

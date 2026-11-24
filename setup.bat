@@ -30,6 +30,6 @@ echo.
 echo Microphones on this PC:
 python tiger.py --list-mics
 echo.
-echo Setup done. Put part of your mic's name in config.json under "mic", setting "device" (for example "TONOR"),
-echo or leave it as null to use the Windows default microphone.
+echo Setup done. Open "Tiger Settings.bat" to pick your microphone and voice and enter your
+echo carry distances. Tiger uses the Windows default microphone until you pick one.
 pause

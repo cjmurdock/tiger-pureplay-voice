@@ -4,6 +4,11 @@ token.json
 models/
 __pycache__/
 *.pyc
+# Written by Tiger and Tiger Settings while running
+status.json
+tiger_request.json
+config.backup.json
+*.json.tmp*
 # Local test scripts and logs
 *_log.txt
 tiger_*test.bat
