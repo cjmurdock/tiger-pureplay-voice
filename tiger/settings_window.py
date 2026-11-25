@@ -57,7 +57,7 @@ class SettingsWindow:
         self.updating = False
 
         root.title("Tiger Settings")
-        root.minsize(640, 520)
+        root.minsize(700, 640)
         self.load_config()
 
         style = ttk.Style()
@@ -68,11 +68,13 @@ class SettingsWindow:
 
         self.banner = ttk.Label(root, style="Bad.TLabel", wraplength=600, padding=(12, 8, 12, 0))
         self.banner.pack(fill="x")
+        self.tabs = {}
         self.nb = ttk.Notebook(root)
         self.nb.pack(fill="both", expand=True, padx=10, pady=10)
         self.build_voice_tab()
         self.build_mic_tab()
         self.build_distance_tab()
+        self.build_players_tab()
         self.build_status_tab()
         self.build_update_tab()
         self.saved_label = ttk.Label(root, style="Hint.TLabel", padding=(12, 0, 12, 10))
@@ -82,6 +84,10 @@ class SettingsWindow:
         root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.show_config_error()
         self.root.after(500, self.tick)
+
+    def current_tab(self):
+        sel = self.nb.select()
+        return next((n for n, t in self.tabs.items() if str(t) == sel), None)
 
     # ------------------------------------------------------------------ config
     def load_config(self):
@@ -129,31 +135,83 @@ class SettingsWindow:
         from .audio import rate_to_step, RATE_MIN_STEP, RATE_MAX_STEP
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Voice")
-        ttk.Label(tab, text="Pick the voice Tiger talks with. Double-click one, or press Preview, "
-                            "to hear it.", style="Hint.TLabel").pack(anchor="w")
+        self.tabs["Voice"] = tab
+        v = self.cfg.get("voice", {})
 
-        lf = ttk.Frame(tab)
-        lf.pack(fill="both", expand=True, pady=(8, 8))
-        self.voice_tree = ttk.Treeview(lf, columns=("lang", "gender", "use"), height=8,
+        top = ttk.Frame(tab)
+        top.pack(fill="x")
+        self.engine_var = tk.StringVar(value=v.get("engine") or "windows")
+        ttk.Radiobutton(top, text="Windows voices (built in)", value="windows",
+                        variable=self.engine_var, command=self.show_engine).pack(side="left")
+        ttk.Radiobutton(top, text="Azure voices (most natural, free Azure key)", value="azure",
+                        variable=self.engine_var, command=self.show_engine).pack(side="left", padx=(16, 0))
+        self.engine_note = ttk.Label(tab, style="Hint.TLabel", wraplength=640, justify="left")
+        self.engine_note.pack(anchor="w", pady=(4, 0))
+
+        self.voice_area = ttk.Frame(tab)
+        self.voice_area.pack(fill="both", expand=True, pady=(6, 6))
+
+        # --- Windows voices
+        self.win_frame = ttk.Frame(self.voice_area)
+        lf = ttk.Frame(self.win_frame)
+        lf.pack(fill="both", expand=True)
+        self.voice_tree = ttk.Treeview(lf, columns=("lang", "gender", "use"), height=7,
                                        selectmode="browse")
-        self.voice_tree.heading("#0", text="Voice")
-        self.voice_tree.heading("lang", text="Language")
-        self.voice_tree.heading("gender", text="")
-        self.voice_tree.heading("use", text="")
-        self.voice_tree.column("#0", width=150)
-        self.voice_tree.column("lang", width=200)
-        self.voice_tree.column("gender", width=80)
-        self.voice_tree.column("use", width=110)
+        for col, text, width in (("#0", "Voice", 150), ("lang", "Language", 220),
+                                 ("gender", "", 80), ("use", "", 110)):
+            self.voice_tree.heading(col, text=text)
+            self.voice_tree.column(col, width=width)
         sb = ttk.Scrollbar(lf, orient="vertical", command=self.voice_tree.yview)
         self.voice_tree.configure(yscrollcommand=sb.set)
         self.voice_tree.pack(side="left", fill="both", expand=True)
         sb.pack(side="right", fill="y")
         self.voice_tree.bind("<Double-1>", lambda e: self.preview())
+        ttk.Button(self.win_frame, text="Use the Windows default",
+                   command=self.use_default_voice).pack(anchor="e", pady=(6, 0))
 
+        # --- Azure voices
+        self.az_frame = ttk.Frame(self.voice_area)
+        keyrow = ttk.Frame(self.az_frame)
+        keyrow.pack(fill="x")
+        az = self.cfg.get("azure") or {}
+        ttk.Label(keyrow, text="Key").pack(side="left")
+        self.az_key = tk.StringVar(value=az.get("key", ""))
+        ttk.Entry(keyrow, textvariable=self.az_key, show="•", width=34).pack(side="left", padx=(6, 12))
+        ttk.Label(keyrow, text="Region").pack(side="left")
+        self.az_region = tk.StringVar(value=az.get("region", ""))
+        ttk.Entry(keyrow, textvariable=self.az_region, width=12).pack(side="left", padx=(6, 12))
+        self.az_connect_btn = ttk.Button(keyrow, text="Connect", command=self.azure_connect)
+        self.az_connect_btn.pack(side="left")
+        lf2 = ttk.Frame(self.az_frame)
+        lf2.pack(fill="both", expand=True, pady=(6, 0))
+        self.az_tree = ttk.Treeview(lf2, columns=("accent", "gender", "lib", "use"), height=6,
+                                    selectmode="browse")
+        for col, text, width in (("#0", "Voice", 120), ("accent", "Accent", 190),
+                                 ("gender", "", 70), ("lib", "Library", 120), ("use", "", 90)):
+            self.az_tree.heading(col, text=text)
+            self.az_tree.column(col, width=width)
+        sb2 = ttk.Scrollbar(lf2, orient="vertical", command=self.az_tree.yview)
+        self.az_tree.configure(yscrollcommand=sb2.set)
+        self.az_tree.pack(side="left", fill="both", expand=True)
+        sb2.pack(side="right", fill="y")
+        self.az_tree.bind("<Double-1>", lambda e: self.preview())
+        self.az_tree.bind("<<TreeviewSelect>>", lambda e: self.show_library_count())
+        dl = ttk.Frame(self.az_frame)
+        dl.pack(fill="x", pady=(6, 0))
+        self.dl_btn = ttk.Button(dl, text="Download voice library", command=self.start_download)
+        self.dl_btn.pack(side="left")
+        self.dl_stop_btn = ttk.Button(dl, text="Stop", command=self.stop_download)
+        self.dl_stop_btn.pack(side="left", padx=(6, 10))
+        self.dl_stop_btn.state(["disabled"])
+        self.dl_bar = ttk.Progressbar(dl, maximum=100, length=160)
+        self.dl_bar.pack(side="left")
+        self.dl_label = ttk.Label(dl, style="Hint.TLabel")
+        self.dl_label.pack(side="left", padx=(10, 0))
+
+        # --- shared: speed, volume, preview
         sliders = ttk.Frame(tab)
         sliders.pack(fill="x")
         sliders.columnconfigure(1, weight=1)
-        v = self.cfg.get("voice", {})
         ttk.Label(sliders, text="Speed").grid(row=0, column=0, sticky="w", padx=(0, 10))
         self.rate_var = tk.IntVar(value=rate_to_step(v.get("rate", 190)))
         ttk.Scale(sliders, from_=RATE_MIN_STEP, to=RATE_MAX_STEP, variable=self.rate_var,
@@ -169,19 +227,37 @@ class SettingsWindow:
         self.update_slider_labels()
 
         pv = ttk.Frame(tab)
-        pv.pack(fill="x", pady=(12, 0))
+        pv.pack(fill="x", pady=(10, 0))
         ttk.Label(pv, text="Preview line").pack(side="left", padx=(0, 10))
         self.preview_var = tk.StringVar(value=PREVIEW_TEXT)
         ttk.Entry(pv, textvariable=self.preview_var).pack(side="left", fill="x", expand=True)
 
         btns = ttk.Frame(tab)
-        btns.pack(fill="x", pady=(10, 0))
+        btns.pack(fill="x", pady=(8, 0))
         ttk.Button(btns, text="Preview", command=self.preview).pack(side="left")
         ttk.Button(btns, text="Stop", command=self.stop_preview).pack(side="left", padx=(6, 0))
         ttk.Button(btns, text="Use this voice", command=self.use_voice).pack(side="right")
-        ttk.Button(btns, text="Use the Windows default",
-                   command=self.use_default_voice).pack(side="right", padx=(0, 6))
+        self.download_stop = None
         self.load_voices()
+        self.load_azure_voices()
+        self.show_engine()
+
+    def show_engine(self):
+        engine = self.engine_var.get()
+        for f in (self.win_frame, self.az_frame):
+            f.pack_forget()
+        if engine == "azure":
+            self.az_frame.pack(fill="both", expand=True)
+            self.engine_note.configure(
+                text="Microsoft's neural voices. Enter the key and region of your Azure Speech "
+                     "resource (see the setup guide), press Connect, pick a voice and download its "
+                     "library: every line Tiger says is saved on this PC, so it plays instantly and "
+                     "without internet. A library is about 90,000 characters; Azure's free tier "
+                     "allows 500,000 a month.")
+        else:
+            self.win_frame.pack(fill="both", expand=True)
+            self.engine_note.configure(text="The voices built into Windows. Double-click one, or "
+                                            "press Preview, to hear it.")
 
     def load_voices(self):
         try:
@@ -197,10 +273,11 @@ class SettingsWindow:
         self.mark_voice_in_use(select=True)
 
     def voice_in_use(self):
-        """The voice Tiger uses: what a running Tiger reports, otherwise what config.json says."""
+        """The Windows voice Tiger uses: what a running Tiger reports, otherwise config.json."""
         st = config_store.read_status(self.base_dir)
         if st and st.get("running") and st.get("voice") and tiger_is_running(self.base_dir) \
-                and st.get("voice_setting") == get(self.cfg, "voice.name"):
+                and st.get("voice_setting") == get(self.cfg, "voice.name") \
+                and not str(st.get("voice")).startswith("Azure"):
             return st["voice"]
         want = (get(self.cfg, "voice.name") or "").lower().strip()
         if not want:
@@ -214,14 +291,22 @@ class SettingsWindow:
         return None
 
     def mark_voice_in_use(self, select=False):
-        current = self.voice_in_use()
+        azure_on = get(self.cfg, "voice.engine") == "azure"
+        current = None if azure_on else self.voice_in_use()
         for v in self.voices:
             self.voice_tree.set(v["description"], "use", "✓ in use" if v["description"] == current else "")
         if select and current and self.voice_tree.exists(current):
             self.voice_tree.selection_set(current)
             self.voice_tree.see(current)
+        az_current = get(self.cfg, "voice.azure_voice") if azure_on else None
+        for iid in self.az_tree.get_children():
+            self.az_tree.set(iid, "use", "✓ in use" if iid == az_current else "")
+        if select and az_current and self.az_tree.exists(az_current):
+            self.az_tree.selection_set(az_current)
+            self.az_tree.see(az_current)
         name = get(self.cfg, "voice.name")
-        if name and current is None and self.voices and getattr(self, "_warned_missing", None) != name:
+        if not azure_on and name and current is None and self.voices and \
+                getattr(self, "_warned_missing", None) != name:
             self._warned_missing = name
             self.saved_label.configure(
                 text=f"config.json asks for '{name}', which isn't installed here, so Tiger uses "
@@ -231,6 +316,142 @@ class SettingsWindow:
         sel = self.voice_tree.selection()
         return next((v for v in self.voices if sel and v["description"] == sel[0]), None)
 
+    # --- Azure
+    def azure_tts(self):
+        from .azure_tts import AzureTTS
+        return AzureTTS(self.az_key.get(), self.az_region.get())
+
+    def load_azure_voices(self, voices=None):
+        from .voice_library import load_voice_list
+        self.az_voices = voices if voices is not None else load_voice_list(self.base_dir)
+        self.az_tree.delete(*self.az_tree.get_children())
+        for v in self.az_voices:
+            self.az_tree.insert("", "end", iid=v["id"], text=v["name"],
+                                values=(v["accent"], v["gender"], "", ""))
+        if not self.az_voices:
+            self.dl_label.configure(text="Enter your key and region, then press Connect.")
+        self.mark_voice_in_use(select=True)
+        if not self.az_tree.selection():
+            first = next((i for i in ("en-CA-LiamNeural", "en-CA-ClaraNeural") if self.az_tree.exists(i)),
+                         None)
+            if first:
+                self.az_tree.selection_set(first)
+                self.az_tree.see(first)
+        self.refresh_library_counts()
+
+    def azure_connect(self):
+        tts = self.azure_tts()
+        if not tts.configured:
+            self.dl_label.configure(text="Enter the key and region first.")
+            return
+        self.save({"azure.key": tts.key, "azure.region": tts.region}, "Azure key saved")
+        self.az_connect_btn.state(["disabled"])
+        self.dl_label.configure(text="Connecting to Azure...")
+
+        def done(result):
+            from .voice_library import save_voice_list
+            self.az_connect_btn.state(["!disabled"])
+            if isinstance(result, Exception):
+                self.dl_label.configure(text=str(result))
+                return
+            try:
+                save_voice_list(self.base_dir, result)
+            except OSError:
+                pass
+            self.load_azure_voices(result)
+            self.dl_label.configure(text=f"Connected: {len(result)} English voices.")
+        self.run_in_background(tts.list_voices, done)
+
+    def selected_azure(self):
+        sel = self.az_tree.selection()
+        return next((v for v in self.az_voices if sel and v["id"] == sel[0]), None)
+
+    def current_lines(self):
+        """Every sentence the library needs, for this config and these players."""
+        from .lines import repertoire
+        names = {n for n in (self.cfg.get("player_names") or {}).values() if n}
+        for p in (config_store.read_status(self.base_dir) or {}).get("players") or []:
+            names.add((self.cfg.get("player_names") or {}).get(p) or p)
+        voice_names = [v["name"] for v in self.az_voices] + [v["name"] for v in self.voices]
+        return repertoire(self.cfg, sorted(names), voice_names)
+
+    def library_for(self, voice_id):
+        from .voice_library import VoiceLibrary
+        return VoiceLibrary(self.base_dir, voice_id, int(round(self.rate_var.get())))
+
+    def refresh_library_counts(self):
+        """Fill the Library column (in the background: it checks a few thousand files)."""
+        from .voice_library import downloaded_voices
+        have = set(downloaded_voices(self.base_dir))
+        ids = [v["id"] for v in self.az_voices if v["id"] in have]
+        lines = self.current_lines()
+
+        def work():
+            return {i: self.library_for(i).count(lines) for i in ids}
+
+        def done(counts):
+            if isinstance(counts, Exception):
+                return
+            total = len(lines)
+            for iid in self.az_tree.get_children():
+                n = counts.get(iid, 0)
+                text = "" if not n else ("✓ complete" if n >= total else f"{n * 100 // total}%")
+                self.az_tree.set(iid, "lib", text)
+            self.show_library_count(counts, total)
+        self.run_in_background(work, done)
+
+    def show_library_count(self, counts=None, total=None):
+        v = self.selected_azure()
+        if v is None or self.download_stop is not None:
+            return
+        if counts is None:
+            lines = self.current_lines()
+            total, n = len(lines), self.library_for(v["id"]).count(lines)
+        else:
+            n = counts.get(v["id"], 0)
+        speed = int(round(self.rate_var.get()))
+        sp = "" if speed == 0 else f" at speed {speed:+d}"
+        self.dl_bar["value"] = 100 * n / total if total else 0
+        self.dl_label.configure(
+            text=f"{v['name']}{sp}: {n:,} of {total:,} lines on this PC." if n < total else
+            f"{v['name']}{sp}: all {total:,} lines are on this PC.")
+
+    def start_download(self):
+        v = self.selected_azure()
+        tts = self.azure_tts()
+        if v is None:
+            self.dl_label.configure(text="Pick a voice first.")
+            return
+        if not tts.configured:
+            self.dl_label.configure(text="Enter the key and region, and press Connect, first.")
+            return
+        lib, lines = self.library_for(v["id"]), self.current_lines()
+        self.download_stop = threading.Event()
+        stop = self.download_stop
+        self.dl_btn.state(["disabled"])
+        self.dl_stop_btn.state(["!disabled"])
+
+        def progress(done, total, note):
+            def ui():
+                self.dl_bar["value"] = 100 * done / total if total else 0
+                self.dl_label.configure(text=note or f"Downloading {v['name']}: {done:,} of {total:,}")
+            self._ui.put(ui)
+
+        def finished(result):
+            self.download_stop = None
+            self.dl_btn.state(["!disabled"])
+            self.dl_stop_btn.state(["disabled"])
+            if isinstance(result, Exception):
+                self.dl_label.configure(text=f"Download stopped: {result}")
+            self.refresh_library_counts()
+        self.run_in_background(lambda: lib.download(tts, lines, progress, stop), finished)
+
+    def stop_download(self):
+        if self.download_stop is not None:
+            self.download_stop.set()
+            self.dl_label.configure(text="Stopping after this batch...")
+
+    # --- shared
     def update_slider_labels(self):
         step = int(round(self.rate_var.get()))
         self.rate_label.configure(text="Normal" if step == 0 else f"{step:+d}")
@@ -241,46 +462,164 @@ class SettingsWindow:
         self.update_slider_labels()
         self.save_later("rate", lambda: {"voice.rate": step_to_rate(int(round(self.rate_var.get())))},
                         "Speed saved")
+        if self.engine_var.get() == "azure":
+            job = getattr(self, "_count_job", None)
+            if job:
+                self.root.after_cancel(job)
+            self._count_job = self.root.after(700, self.refresh_library_counts)
 
     def on_volume(self):
         self.update_slider_labels()
         self.save_later("volume", lambda: {"voice.volume": round(self.vol_var.get() / 100, 2)},
                         "Volume saved")
 
-    def preview(self):
-        from .audio import Speaker, step_to_rate
-        v = self.selected_voice()
-        if v is None:
-            self.saved_label.configure(text="Pick a voice in the list first.")
-            return
+    def preview_speaker(self):
+        from .audio import Speaker
         if self._preview is None:
-            self._preview = Speaker(True, voice_name=v["name"])
+            self._preview = Speaker(True, base_dir=self.base_dir)
         self._preview.stop()
-        self._preview.configure(voice_name=v["description"],
-                                rate=step_to_rate(int(round(self.rate_var.get()))),
-                                volume=self.vol_var.get() / 100)
-        self._preview.say(self.preview_var.get().strip() or PREVIEW_TEXT)
+        return self._preview
+
+    def preview(self, text=None):
+        from .audio import step_to_rate
+        rate = step_to_rate(int(round(self.rate_var.get())))
+        text = text or self.preview_var.get().strip() or PREVIEW_TEXT
+        if self.engine_var.get() == "azure":
+            v = self.selected_azure()
+            if v is None:
+                self.saved_label.configure(text="Pick an Azure voice first (press Connect if the list is empty).")
+                return
+            sp = self.preview_speaker()
+            sp.configure(rate=rate, volume=self.vol_var.get() / 100, engine="azure",
+                         azure={"key": self.az_key.get().strip(), "region": self.az_region.get().strip(),
+                                "voice": v["id"]})
+        else:
+            v = self.selected_voice()
+            if v is None:
+                self.saved_label.configure(text="Pick a voice in the list first.")
+                return
+            sp = self.preview_speaker()
+            sp.configure(voice_name=v["description"], rate=rate, volume=self.vol_var.get() / 100,
+                         engine="windows")
+        sp.say(text)
 
     def stop_preview(self):
         if self._preview is not None:
             self._preview.stop()
 
     def use_voice(self):
+        if self.engine_var.get() == "azure":
+            v = self.selected_azure()
+            if v is None:
+                self.saved_label.configure(text="Pick an Azure voice first.")
+                return
+            tts = self.azure_tts()
+            changes = {"voice.engine": "azure", "voice.azure_voice": v["id"]}
+            if tts.configured:
+                changes.update({"azure.key": tts.key, "azure.region": tts.region})
+            if self.save(changes, f"{v['name']} saved"):
+                self.mark_voice_in_use()
+            return
         v = self.selected_voice()
         if v is None:
             self.saved_label.configure(text="Pick a voice in the list first.")
             return
-        if self.save({"voice.name": v["name"]}, f"{v['name']} saved"):
+        if self.save({"voice.engine": "windows", "voice.name": v["name"]}, f"{v['name']} saved"):
             self.mark_voice_in_use()
 
     def use_default_voice(self):
-        if self.save({"voice.name": None}, "Windows default voice saved"):
+        if self.save({"voice.engine": "windows", "voice.name": None}, "Windows default voice saved"):
             self.mark_voice_in_use()
+
+    # ------------------------------------------------------------------ players tab
+    def build_players_tab(self):
+        tab = ttk.Frame(self.nb, padding=12)
+        self.nb.add(tab, text="Players")
+        self.tabs["Players"] = tab
+        ttk.Label(tab, text="How Tiger says each player's name. Pureplay names like \"cjmurdock\" "
+                            "can be said as a real name (\"Cameron\") in \"you're up\" and the score. "
+                            "Players appear here once Tiger has seen them in a round, or add a name "
+                            "yourself.", style="Hint.TLabel", wraplength=640, justify="left").pack(anchor="w")
+        lf = ttk.Frame(tab)
+        lf.pack(fill="both", expand=True, pady=(8, 8))
+        self.players_tree = ttk.Treeview(lf, columns=("say",), height=8, selectmode="browse")
+        self.players_tree.heading("#0", text="Pureplay name")
+        self.players_tree.heading("say", text="Tiger says")
+        self.players_tree.column("#0", width=260)
+        self.players_tree.column("say", width=260)
+        self.players_tree.pack(side="left", fill="both", expand=True)
+        self.players_tree.bind("<<TreeviewSelect>>", lambda e: self.player_selected())
+        form = ttk.Frame(tab)
+        form.pack(fill="x")
+        ttk.Label(form, text="Pureplay name").grid(row=0, column=0, sticky="w")
+        self.pp_name = tk.StringVar()
+        ttk.Entry(form, textvariable=self.pp_name, width=26).grid(row=1, column=0, sticky="w", padx=(0, 12))
+        ttk.Label(form, text="Say it as").grid(row=0, column=1, sticky="w")
+        self.pp_say = tk.StringVar()
+        ttk.Entry(form, textvariable=self.pp_say, width=26).grid(row=1, column=1, sticky="w", padx=(0, 12))
+        b = ttk.Frame(form)
+        b.grid(row=1, column=2, sticky="w")
+        ttk.Button(b, text="Save", command=self.save_player).pack(side="left")
+        ttk.Button(b, text="Remove", command=self.remove_player).pack(side="left", padx=(6, 0))
+        ttk.Button(b, text="Test", command=self.test_player).pack(side="left", padx=(6, 0))
+        self.refresh_players()
+
+    def refresh_players(self):
+        names = dict(self.cfg.get("player_names") or {})
+        seen = (config_store.read_status(self.base_dir) or {}).get("players") or []
+        keys = list(names) + [p for p in seen if p not in names]
+        sel = self.players_tree.selection()
+        self.players_tree.delete(*self.players_tree.get_children())
+        for k in keys:
+            self.players_tree.insert("", "end", iid=k, text=k, values=(names.get(k) or k,))
+        if sel and self.players_tree.exists(sel[0]):
+            self.players_tree.selection_set(sel[0])
+
+    def player_selected(self):
+        sel = self.players_tree.selection()
+        if sel:
+            self.pp_name.set(sel[0])
+            self.pp_say.set((self.cfg.get("player_names") or {}).get(sel[0], ""))
+
+    def save_player(self):
+        pp, say = self.pp_name.get().strip(), self.pp_say.get().strip()
+        if not pp:
+            self.saved_label.configure(text="Type the name exactly as Pureplay shows it.")
+            return
+        names = dict(self.cfg.get("player_names") or {})
+        names[pp] = say or pp
+        if self.save({"player_names": names}, f"{pp} will be called {say or pp}"):
+            self.refresh_players()
+
+    def remove_player(self):
+        pp = self.pp_name.get().strip()
+        names = dict(self.cfg.get("player_names") or {})
+        if pp in names:
+            del names[pp]
+            if self.save({"player_names": names}, f"{pp} removed"):
+                self.pp_say.set("")
+                self.refresh_players()
+
+    def test_player(self):
+        say = self.pp_say.get().strip() or self.pp_name.get().strip()
+        if not say:
+            return
+        engine = get(self.cfg, "voice.engine") or "windows"
+        from .audio import step_to_rate
+        sp = self.preview_speaker()
+        v = self.cfg.get("voice", {})
+        az = self.cfg.get("azure") or {}
+        sp.configure(voice_name=v.get("name") or "", rate=v.get("rate", step_to_rate(0)),
+                     volume=v.get("volume", 1.0), engine=engine,
+                     azure={"key": az.get("key", ""), "region": az.get("region", ""),
+                            "voice": v.get("azure_voice", "")})
+        sp.say(f"{say}, you're up.")
 
     # ------------------------------------------------------------------ microphone tab
     def build_mic_tab(self):
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Microphone")
+        self.tabs["Microphone"] = tab
         ttk.Label(tab, text="Pick the mic Tiger listens on, then talk from where you stand to hit. "
                             "The bar should jump well into the middle when you speak.",
                   style="Hint.TLabel", wraplength=590).pack(anchor="w")
@@ -353,7 +692,7 @@ class SettingsWindow:
 
     def start_meter(self):
         self.stop_meter()
-        if self.nb.index(self.nb.select()) != 1:
+        if self.current_tab() != "Microphone":
             return
         try:
             import sounddevice as sd
@@ -413,6 +752,7 @@ class SettingsWindow:
     def build_distance_tab(self):
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Distances")
+        self.tabs["Distances"] = tab
         ttk.Label(tab, text="For the shot in front of you (\"what club should I hit\"), Tiger uses "
                             "Pureplay's suggested club, which comes from the player's own bag in "
                             "Pureplay, whenever club suggestion is on in Pureplay.\n\nThese "
@@ -457,6 +797,7 @@ class SettingsWindow:
     def build_status_tab(self):
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Status")
+        self.tabs["Status"] = tab
         info = ttk.Frame(tab)
         info.pack(fill="x")
         info.columnconfigure(1, weight=1)
@@ -563,6 +904,7 @@ class SettingsWindow:
     def build_update_tab(self):
         tab = ttk.Frame(self.nb, padding=12)
         self.nb.add(tab, text="Updates")
+        self.tabs["Updates"] = tab
         self.update_headline = ttk.Label(tab, text="Checking GitHub for updates...", style="Big.TLabel")
         self.update_headline.pack(anchor="w")
         info = ttk.Frame(tab)
@@ -632,14 +974,14 @@ class SettingsWindow:
         if is_current(self.base_dir, latest):
             self.update_headline.configure(text="You have the newest version.", style="Good.TLabel")
             self.update_btn.state(["disabled"])
-            self.nb.tab(4, text="Updates")
+            self.nb.tab(self.tabs["Updates"], text="Updates")
         else:
             known = installed_version(self.base_dir) is not None
             self.update_headline.configure(
                 text="An update is available." if known else
                 "Update to make sure you have the newest version.", style="Bad.TLabel")
             self.update_btn.state(["!disabled"])
-            self.nb.tab(4, text="Updates (new)")
+            self.nb.tab(self.tabs["Updates"], text="Updates (new)")
 
     def start_update(self):
         if self.updating or not self.latest:
@@ -710,12 +1052,14 @@ class SettingsWindow:
 
     # ------------------------------------------------------------------ housekeeping
     def on_tab_changed(self, _):
-        if self.nb.index(self.nb.select()) == 1:
+        if self.current_tab() == "Microphone":
             self.start_meter()
         else:
             self.stop_meter()
-        if self.nb.index(self.nb.select()) == 3:
+        if self.current_tab() == "Status":
             self.refresh_status()
+        if self.current_tab() == "Players":
+            self.refresh_players()
 
     def tick(self):
         """Keep up with changes made elsewhere (e.g. "Tiger, switch to Linda")."""
@@ -740,7 +1084,7 @@ class SettingsWindow:
                         self.vol_var.set(int(round(float(v.get("volume", 1.0)) * 100)))
                         self.update_slider_labels()
                 self.mark_voice_in_use()
-                if self.nb.index(self.nb.select()) == 3:
+                if self.current_tab() == "Status":
                     self.refresh_status()
         finally:
             self.root.after(80, self.tick)

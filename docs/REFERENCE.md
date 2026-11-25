@@ -82,13 +82,16 @@ Plain left/right with no number nudges 2°. Numbers can be said the golf way ("o
 Say **"Tiger, open settings"**, or double-click **Tiger Settings.bat** (or run
 `python tiger.py --settings`). "Tiger, close settings" closes it and puts Pureplay back in front.
 
-- **Voice:** every voice Tiger can use. Double-click or press **Preview** to hear it with the line in
-  the box, then **Use this voice**. **Speed** and **Volume** save as you move them.
+- **Voice:** choose **Windows voices** (built in) or **Azure voices** (Microsoft's neural voices;
+  see *Azure voices* below). Double-click or press **Preview** to hear one with the line in the box,
+  then **Use this voice**. **Speed** and **Volume** save as you move them.
 - **Microphone:** pick the mic, talk and watch the level bar, then **Use this microphone**. The
   slider below it is `min_confidence`.
 - **Distances:** backup carry for each club (`carry_yards`), used only when Pureplay's club
   suggestion is off or you ask about a distance other than the one you have. Blank means the club
   isn't in your bag.
+- **Players:** how Tiger says each Pureplay player's name (`player_names`), e.g. "cjmurdock" → "Cameron"
+  in "you're up" and the score. Names appear once Tiger has seen them; **Test** says "<name>, you're up."
 - **Status:** whether Tiger is running, how it's paired with Pureplay, **Re-pair Tiger**, and
   buttons to open the Tiger folder and config.json. **Start Tiger** runs `run_tiger.bat` if it isn't
   running.
@@ -101,6 +104,30 @@ Everything is saved to config.json straight away, changing only that setting, wi
 kept as `config.backup.json`. A running Tiger checks config.json every second and uses the new voice
 or mic without restarting (the wake word still needs a restart). If config.json has a typo, Tiger
 keeps its last good settings and the window shows where the mistake is.
+
+## Azure voices
+
+Microsoft's Azure neural voices are much more natural than the Windows ones. Setup (about 10 minutes):
+
+1. Create a free account at azure.microsoft.com (a card is asked for to verify you; the free tier
+   doesn't charge).
+2. In portal.azure.com: **Create a resource** → search **Speech** → create it with any resource group,
+   a region near you (e.g. Canada Central, West US 2) and the **Free F0** pricing tier.
+3. Open it → **Keys and Endpoint** → copy **KEY 1** and the **Location/Region** (e.g. `canadacentral`).
+4. Tiger Settings → Voice → **Azure voices** → paste key and region → **Connect**.
+5. Pick a voice → **Preview** → **Download voice library** → **Use this voice**.
+
+**The voice library:** every sentence Tiger can say (fixed replies, club names, distances 1–600,
+aim 1–45°, scores, "<name>, you're up." for each player…, about 4,000 sentences and 90,000 characters)
+saved as WAV files in `voices\azure\<voice>\speed<step>\`, so lines play instantly and offline.
+Downloading asks Azure for 40 sentences at a time with long pauses between them and cuts the audio at
+the pauses. Each voice and speed has its own library (volume is applied on the PC). A line that isn't
+in the library is fetched the first time it's said (3-second limit) and kept; if Azure can't be reached
+or the key is wrong, Tiger says it with the Windows voice instead and says why once in its window. New
+player names are fetched in the background the first time they're seen. The free F0 tier covers
+500,000 characters a month of the regular neural voices (HD voices aren't included). `voices\` is kept
+by updates and isn't on GitHub. Voices with a library can be chosen by voice too ("Tiger, switch to
+Liam"); Tiger reads that list when it starts.
 
 ## Settings (config.json)
 
@@ -119,6 +146,10 @@ keeps its last good settings and the window shows where the mistake is.
   installed, Tiger uses the Windows default and says so in its window.
 - **`voice.rate`**: speaking speed (about 180 is normal; 220 is brisk).
 - **`voice.volume`**: 0.1 to 1.0.
+- **`voice.engine`**: `"windows"` or `"azure"`; **`voice.azure_voice`**: the Azure voice id (e.g.
+  `"en-CA-LiamNeural"`); **`azure.key`**, **`azure.region`**: your Speech resource's key and region.
+  The key is private: don't share your config.json.
+- **`player_names`**: `{"Pureplay name": "name to say"}`, e.g. `{"cjmurdock": "Cameron"}`.
 - **`voice.confirm_hotkeys`**: `"beep"`, `"voice"` (says the action) or `"none"`.
 - **`min_confidence`**: raise it (e.g. 0.7) if Tiger acts on things you didn't say, lower it if it
   ignores you.

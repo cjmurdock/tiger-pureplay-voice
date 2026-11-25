@@ -29,7 +29,7 @@ VERSION_FILE = "version.json"
 # Never overwritten: the person's own settings, pairing and local files.
 KEEP = {"config.json", "token.json", "status.json", "tiger_request.json", "config.backup.json",
         VERSION_FILE}
-KEEP_DIRS = {"models", "backups", ".git"}
+KEEP_DIRS = {"models", "backups", "voices", ".git"}
 # Settings where a missing entry is a choice (e.g. a club taken out of the bag), so new
 # defaults are never added inside them.
 NO_MERGE = {"carry_yards"}

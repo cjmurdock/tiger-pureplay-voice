@@ -17,7 +17,9 @@
     "name": null,
     "rate": 190,
     "volume": 1.0,
-    "confirm_hotkeys": "beep"
+    "confirm_hotkeys": "beep",
+    "engine": "windows",
+    "azure_voice": ""
   },
   "announce": {
     "your_turn": true,
@@ -68,6 +70,11 @@
     "GapWedge": 110,
     "SandWedge": 95,
     "LobWedge": 80
+  },
+  "player_names": {},
+  "azure": {
+    "key": "",
+    "region": ""
   },
   "home_assistant": {
     "enabled": false,

@@ -136,8 +136,9 @@ def story():
                        "to restart it.", BODY))
     s.append(Spacer(1, 4))
     s += bullets([
-        "<b>Voice</b>: every Windows voice on the PC. Double-click one to hear it, then press <b>Use this "
-        "voice</b>. The <b>Speed</b> and <b>Volume</b> sliders save as you move them. You can also say "
+        "<b>Voice</b>: choose <b>Windows voices</b> (built in) or <b>Azure voices</b> (Microsoft's natural "
+        "neural voices; see <i>Natural voices with Azure</i> below). Double-click a voice to hear it, then "
+        "press <b>Use this voice</b>. The <b>Speed</b> and <b>Volume</b> sliders save as you move them. You can also say "
         "\u201cTiger, switch to Linda\u201d, \u201cTiger, next voice\u201d, \u201cTiger, talk "
         "faster\u201d or \u201cTiger, speak up\u201d.",
         "<b>Microphone</b>: the mic Tiger listens on, a live level meter, and how sure Tiger must be "
@@ -147,10 +148,37 @@ def story():
         "uses Pureplay's suggested club from the player's own bag instead. These numbers are used when "
         "suggestion is off, or for \u201cwhat should I hit from one fifty\u201d when that isn't your "
         "distance. The ones that come with Tiger are placeholders.",
+        "<b>Players</b>: how Tiger says each player's name. Pureplay names like \u201ccjmurdock\u201d can "
+        "be said as a real name (\u201cCameron, you're up\u201d). Players appear once Tiger has seen "
+        "them in a round, or type a name in yourself.",
         "<b>Status</b>: whether Tiger is running and how it's paired with Pureplay, a <b>Re-pair</b> "
         "button, and shortcuts to the Tiger folder and config.json.",
         "<b>Updates</b>: checks for a new version when the window opens. <b>Update now</b> installs it "
         "and restarts Tiger, keeping all your settings."])
+    s.append(Paragraph("Natural voices with Azure (optional)", H))
+    s.append(Paragraph("Microsoft's Azure neural voices sound far more natural than the built-in Windows "
+                       "voices. They need a free Azure account and key. Tiger downloads every line it "
+                       "can say into a <b>voice library</b> on your PC, so during a round they play "
+                       "instantly and without internet. A library is about 90,000 characters; Azure's "
+                       "free tier allows 500,000 characters a month of its regular neural voices (the "
+                       "\u201cHD\u201d voices are not free).", BODY))
+    s.append(Spacer(1, 4))
+    s += bullets([
+        "<b>1.</b> Create a free account at <b>azure.microsoft.com</b> (it asks for a card to verify you; "
+        "the free tier doesn't charge).",
+        "<b>2.</b> In the Azure portal (<b>portal.azure.com</b>), choose <b>Create a resource</b>, search "
+        "for <b>Speech</b>, and create a Speech resource: pick any resource group name, a region near you "
+        "(for example Canada Central or West US 2), and the <b>Free F0</b> pricing tier.",
+        "<b>3.</b> Open the new resource and go to <b>Keys and Endpoint</b>. Copy <b>KEY 1</b> and the "
+        "<b>Location/Region</b> (for example canadacentral).",
+        "<b>4.</b> In Tiger Settings, on the Voice tab, choose <b>Azure voices</b>, paste the key and region, "
+        "and press <b>Connect</b>.",
+        "<b>5.</b> Pick a voice, press <b>Preview</b>, then <b>Download voice library</b> (it runs in the "
+        "background; you can keep playing), and <b>Use this voice</b>.",
+        "Each voice and speed has its own library, so changing the speed asks for another download. "
+        "Volume can change freely. Any line not in the library is fetched the first time it's said and "
+        "kept; with no internet, Tiger uses the Windows voice for it instead. Your key is saved only in "
+        "your own config.json: don't share that file."])
     s.append(Paragraph("Other settings (config.json)", H))
     s += bullets([
         "<b>Callouts</b>: <b>\"announce\"</b> controls the \u201cyou're up, 150 to the pin\u201d callouts. "

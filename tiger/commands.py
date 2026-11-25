@@ -45,6 +45,12 @@ def number_phrases(n):
     return out
 
 
+def spoken_number(n):
+    """How Tiger says a number: "one hundred fifty"; digits from 400 up."""
+    n = int(round(n))
+    return number_phrases(n)[0] if 0 < n < 400 else str(n)
+
+
 def _small(tokens):
     """Value of a run like ["ninety", "five"] or ["twelve"]; None if not a valid < 100 number."""
     if not tokens:

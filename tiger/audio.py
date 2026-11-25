@@ -1,6 +1,7 @@
 """Microphone capture + Vosk recognition (listener) and text-to-speech (speaker)."""
 import json
 import logging
+import os
 import queue
 import sys
 import threading
@@ -33,11 +34,17 @@ class Speaker:
     takes effect from the next thing Tiger says.
     """
 
-    def __init__(self, enabled=True, rate=190, volume=1.0, voice_name=None, on_message=None):
+    def __init__(self, enabled=True, rate=190, volume=1.0, voice_name=None, on_message=None,
+                 engine="windows", azure=None, base_dir=None):
         self.enabled = enabled
         self.rate = rate
         self.volume = volume
         self.voice_name = voice_name
+        self.engine = engine or "windows"  # "windows" (SAPI) or "azure"
+        self.azure = dict(azure or {})     # {"key", "region", "voice"}
+        self.base_dir = base_dir
+        self._azure_lib = None
+        self._azure_warned = False
         self.on_message = on_message      # fn(text) for warnings the user should see
         self.active_voice = None          # description of the voice actually in use
         self.speaking = threading.Event()
@@ -56,10 +63,11 @@ class Speaker:
     def beep(self):
         self._q.put(("beep", None))
 
-    def configure(self, voice_name=None, rate=None, volume=None, enabled=None):
+    def configure(self, voice_name=None, rate=None, volume=None, enabled=None, engine=None,
+                  azure=None):
         """Change settings live. Leave an argument as None to keep it."""
-        self._q.put(("config", {"voice_name": voice_name, "rate": rate,
-                                "volume": volume, "enabled": enabled}))
+        self._q.put(("config", {"voice_name": voice_name, "rate": rate, "volume": volume,
+                                "enabled": enabled, "engine": engine, "azure": azure}))
 
     def stop(self):
         """Cut off anything being said or waiting to be said (used by Settings previews)."""
@@ -102,9 +110,40 @@ class Speaker:
                               f"the Windows default ({self._default_token.GetDescription()}). "
                               "Pick another in Tiger Settings, or run 'python tiger.py --list-voices'.")
         self.active_voice = voice.Voice.GetDescription()
+        if self.engine == "azure" and self.azure.get("voice"):
+            self.active_voice = f"Azure: {self.azure['voice']} (fallback: {self.active_voice})"
         log.info("Voice: %s", self.active_voice)
         voice.Rate = rate_to_step(self.rate)
         voice.Volume = max(0, min(100, int(round(float(self.volume) * 100))))
+
+    def library(self):
+        """The Azure voice library for the current voice and speed (created on demand)."""
+        from .voice_library import VoiceLibrary
+        voice, step = self.azure.get("voice"), max(RATE_MIN_STEP, min(RATE_MAX_STEP, rate_to_step(self.rate)))
+        lib = self._azure_lib
+        if lib is None or lib.voice_id != voice or lib.rate_step != step:
+            lib = self._azure_lib = VoiceLibrary(self.base_dir or ".", voice, step)
+        return lib
+
+    def _say_azure(self, text):
+        """Play text from the Azure voice library, fetching any missing sentence. Returns the
+        part that couldn't be played (to be spoken by the Windows voice instead)."""
+        from .azure_tts import AzureTTS
+        from .voice_library import Player, join_clips
+        lib = self.library()
+        tts = AzureTTS(self.azure.get("key"), self.azure.get("region"))
+        clips, leftover = lib.clips_for(text, tts, timeout=3)
+        if clips:
+            player = Player(os.path.dirname(lib.folder))
+            if not player.play(join_clips(clips, self.volume), self._interrupt):
+                return ""                                 # cut off on purpose
+        if leftover and not self._azure_warned:
+            self._azure_warned = True
+            self._message("Azure isn't answering (or has no key), so I'm using the Windows voice for "
+                          "lines that aren't in the voice library yet.")
+        elif not leftover:
+            self._azure_warned = False
+        return leftover
 
     def _run(self):
         engine = None
@@ -130,10 +169,21 @@ class Speaker:
                         self.rate = data["rate"]
                     if data["volume"] is not None:
                         self.volume = data["volume"]
+                    if data.get("engine") is not None:
+                        self.engine = data["engine"] or "windows"
+                    if data.get("azure") is not None:
+                        self.azure = dict(data["azure"])
+                        self._azure_warned = False
                     if engine is not None:
                         self._apply(engine)
-                elif engine is not None:
+                    elif self.engine == "azure" and self.azure.get("voice"):
+                        self.active_voice = f"Azure: {self.azure['voice']}"
+                else:
                     self._interrupt.clear()
+                    if self.engine == "azure" and self.azure.get("voice"):
+                        data = self._say_azure(data)       # what's left if Azure couldn't say it
+                    if not data or engine is None:
+                        continue
                     engine.Speak(data, 1)                  # SVSFlagsAsync
                     while not engine.WaitUntilDone(100):
                         if self._interrupt.is_set():

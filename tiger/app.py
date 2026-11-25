@@ -10,7 +10,7 @@ import time
 
 from . import config_store, keys
 from .config_store import ConfigError
-from .commands import Vocabulary, club_spoken, pick_club_for, number_phrases
+from .commands import Vocabulary, club_spoken, pick_club_for, number_phrases, spoken_number
 from .pureplay_api import PurePlayClient, ApiError
 
 log = logging.getLogger("tiger")
@@ -28,9 +28,18 @@ BLOCKER_WORDS = {
 }
 
 
-def spoken_number(n):
-    n = int(round(n))
-    return number_phrases(n)[0] if 0 < n < 400 else str(n)
+def azure_settings(cfg):
+    az = cfg.get("azure") or {}
+    return {"key": az.get("key", ""), "region": az.get("region", ""),
+            "voice": (cfg.get("voice") or {}).get("azure_voice", "")}
+
+
+def azure_voice_entries(base_dir, cfg):
+    """Azure voices Tiger can switch to by name: those with a library here, plus the current one."""
+    from .voice_library import downloaded_voices, load_voice_list
+    keep = set(downloaded_voices(base_dir)) | {(cfg.get("voice") or {}).get("azure_voice")}
+    return [{"name": v["name"], "description": f"Azure: {v['id']}", "engine": "azure", "id": v["id"]}
+            for v in load_voice_list(base_dir) if v["id"] in keep]
 
 
 class Tiger:
@@ -49,6 +58,8 @@ class Tiger:
         self._last_message = ""
         self._api_task = None
         self.sleeping = False
+        self.players_seen = []              # Pureplay player names seen this session
+        self._prefetched = set()
         self.announced_shots = set()
         self.api = PurePlayClient(cfg["pureplay"]["host"], cfg["pureplay"]["port"],
                                   cfg["pureplay"].get("client_name", "Tiger Voice Control"),
@@ -115,6 +126,7 @@ class Tiger:
             "sleeping": self.sleeping,
             "config_error": self._cfg_error,
             "message": self._last_message,
+            "players": self.players_seen,
         }
 
     def reload_config_if_changed(self):
@@ -140,10 +152,13 @@ class Tiger:
         old = self.cfg
         self.cfg = new
         ov, nv = old.get("voice", {}), new.get("voice", {})
-        if any(ov.get(k) != nv.get(k) for k in ("name", "rate", "volume", "enabled")):
+        if any(ov.get(k) != nv.get(k) for k in ("name", "rate", "volume", "enabled", "engine",
+                                                "azure_voice")) or old.get("azure") != new.get("azure"):
             self.speaker.configure(voice_name=nv.get("name") or "", rate=nv.get("rate", 190),
-                                   volume=nv.get("volume", 1.0), enabled=nv.get("enabled", True))
+                                   volume=nv.get("volume", 1.0), enabled=nv.get("enabled", True),
+                                   engine=nv.get("engine", "windows"), azure=azure_settings(new))
             print("[Tiger] Voice settings updated.")
+            self._prefetched.clear()
         if (old.get("mic") or {}).get("device") != (new.get("mic") or {}).get("device"):
             if self.listener is not None:
                 self.listener.set_device((new.get("mic") or {}).get("device"))
@@ -240,11 +255,47 @@ class Tiger:
             elif mode == "voice":
                 self.speaker.say(name.replace("_", " "))
 
+    # ---------- player names ----------
+    def spoken_name(self, player, default="Next player"):
+        """The name to say for a Pureplay player: their "say it as" name if one is set."""
+        name = (player or {}).get("name") or ""
+        names = {k.strip().lower(): v for k, v in (self.cfg.get("player_names") or {}).items()
+                 if isinstance(v, str) and v.strip()}
+        return names.get(name.strip().lower(), name).strip() or default
+
+    def note_players(self, players):
+        """Remember Pureplay names (for the Players tab) and, with an Azure voice, fetch their
+        lines in the background the first time each name is seen."""
+        for p in players:
+            name = (p.get("name") or "").strip()
+            if name and name not in self.players_seen:
+                self.players_seen.append(name)
+        spoken = {self.spoken_name(p, "") for p in players} - {""} - self._prefetched
+        if spoken and self.cfg.get("voice", {}).get("engine") == "azure":
+            self._prefetched |= spoken
+            threading.Thread(target=self._prefetch_names, args=(sorted(spoken),), daemon=True).start()
+
+    def _prefetch_names(self, names):
+        from .azure_tts import AzureTTS, AzureError
+        from .lines import repertoire
+        try:
+            lib = self.speaker.library()
+            az = self.cfg.get("azure") or {}
+            tts = AzureTTS(az.get("key"), az.get("region"))
+            if not tts.configured:
+                return
+            wanted = [s for s in repertoire({"units": self.cfg.get("units")}, names)
+                      if any(s.startswith(n + ",") for n in names) and not lib.has(s)]
+            lib.download(tts, wanted)
+        except (AzureError, OSError) as e:
+            log.info("Couldn't fetch player lines: %s", e)
+
     async def active_player(self):
         snap = await self.api.snapshot()
         turn = snap.get("turn") or {}
         pid = turn.get("activeShooterId")
         players = snap.get("players") or []
+        self.note_players(players)
         player = next((p for p in players if p.get("playerId") == pid), None)
         if player is None:
             player = next((p for p in players if p.get("isLocal")), None)
@@ -392,7 +443,7 @@ class Tiger:
         strokes = (player.get("hole") or {}).get("strokes") or 0
         hole = (snap.get("hole") or {}).get("number")
         extra = f" Hitting {spoken_number(strokes + 1)} on {spoken_number(hole)}." if hole else ""
-        self.speaker.say(f"{player.get('name', 'You')}, {score}.{extra}")
+        self.speaker.say(f"{self.spoken_name(player, 'You')}, {score}.{extra}")
 
     async def do_say_club(self, _):
         snap, player = await self.active_player()
@@ -425,15 +476,23 @@ class Tiger:
         return next((v for v in self.voices if v["name"].lower() == name), None)
 
     def _current_voice(self):
+        vc = self.cfg.get("voice", {})
+        if vc.get("engine") == "azure":
+            return next((v for v in self.voices if v.get("id") == vc.get("azure_voice")), None)
         desc = self.speaker.active_voice or ""
-        return next((v for v in self.voices if v["description"] == desc), None)
+        return next((v for v in self.voices if v["description"] == desc and v.get("engine") != "azure"),
+                    None)
 
     async def do_voice_set(self, name):
         v = self._voice_named(name)
         if v is None:
             self.speaker.say(f"I don't have a voice called {name}.")
             return
-        if self.save({"voice.name": v["name"]}):
+        if v.get("engine") == "azure":
+            changes = {"voice.engine": "azure", "voice.azure_voice": v["id"]}
+        else:
+            changes = {"voice.engine": "windows", "voice.name": v["name"]}
+        if self.save(changes):
             self.speaker.say(f"This is {v['name']}.")
 
     async def do_voice_next(self, _):
@@ -561,7 +620,7 @@ class Tiger:
             return
         parts = []
         if ann.get("your_turn") and len(snap.get("players") or []) > 1:
-            parts.append(f"{player.get('name', 'Next player')}, you're up.")
+            parts.append(f"{self.spoken_name(player)}, you're up.")
         m = player.get("distanceToHoleM")
         if ann.get("distance_on_turn") and m:
             if player.get("lie") == "Green" or (player.get("hole") or {}).get("onGreen"):
@@ -654,7 +713,9 @@ def main(argv=None):
     v = cfg.get("voice", {})
     messages = []
     speaker = Speaker(v.get("enabled", True), v.get("rate", 190), v.get("volume", 1.0),
-                      args.voice or v.get("name"), on_message=messages.append)
+                      args.voice or v.get("name"), on_message=messages.append,
+                      engine="windows" if args.voice else v.get("engine", "windows"),
+                      azure=azure_settings(cfg), base_dir=base_dir)
     if args.say:
         speaker.say(args.say)
         speaker.wait_until_done()
@@ -666,6 +727,7 @@ def main(argv=None):
     except Exception as e:      # not Windows / no pywin32
         log.debug("Can't list voices: %s", e)
         voices = []
+    voices += azure_voice_entries(base_dir, cfg)
     tiger = Tiger(cfg, base_dir, speaker, dry_run=args.dry_run, voices=voices)
     speaker.on_message = tiger.status
     for m in messages:

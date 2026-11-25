@@ -14,6 +14,8 @@ Say **"Tiger"** and ask naturally, and your Pureplay golf simulator does it:
 - **Talks back:** confirms commands and calls out "you're up, 150 to the pin" when it's your shot.
 - **Safe around conversation:** nothing happens unless you say "Tiger" first, so talking about your 7 iron with friends is fine.
 - **Tiger Settings window:** pick the voice (with a preview), speed and volume, choose the mic with a live level meter, enter your carry distances, check the Pureplay pairing, and update Tiger in one click. A running Tiger picks up changes straight away, so there's no restart. Open it by saying "Tiger, open settings". You can also change the voice by voice: "Tiger, switch to Linda", "Tiger, talk faster".
+- **Natural voices (optional):** Microsoft's Azure neural voices, with every line Tiger says downloaded to a voice library on your PC so it plays instantly and offline. Needs a free Azure key (the free tier covers it); setup steps are in the setup guide.
+- **Real names:** say "Cameron, you're up" instead of a Pureplay username like "cjmurdock" (Players tab).
 
 ## Get it
 

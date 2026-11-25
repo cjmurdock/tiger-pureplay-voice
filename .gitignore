@@ -16,4 +16,5 @@ tiger_*test.bat
 tiger_check.bat
 tiger_voices.bat
 backups/
+voices/
 version.json
