@@ -212,15 +212,45 @@ VOICE_NAME_PREFIXES = ["", "switch to", "switch voice to", "switch the voice to"
                        "be", "switch to the voice", "i want", "give me"]
 
 
+def reserved_words():
+    """Words Tiger's commands use, so they can't be voice names or the wake word."""
+    return set(FILLERS) | set(CLUB_LOOKUP) | NUMBER_WORDS | LITTLE | LOTS | \
+        {w for phrases, _ in HOTKEY_INTENTS for p in phrases for w in p.split()} | \
+        {w for c in CLUB_LOOKUP for w in c.split()} | VOICE_CUES | TALK_WORDS | \
+        {"settings", "setting", "voice", "voices", "louder", "quieter", "faster", "slower"}
+
+
+# Everyday words that would wake Tiger by accident if used as the wake word.
+COMMON_WORDS = {"hey", "hi", "ok", "okay", "yes", "yeah", "no", "nope", "golf", "shot", "ball",
+                "nice", "good", "great", "hit", "swing", "club", "hole", "green", "par", "birdie",
+                "bogey", "eagle", "the", "and", "but", "so", "well", "oh", "um", "uh", "man",
+                "dude", "guys", "come", "look", "wow", "sorry", "thanks", "thank", "you", "me",
+                "computer", "game", "play", "player", "turn", "caddie", "caddy", "pro", "coach", "buddy"}
+
+
+def check_wake_word(word):
+    """(error, warning) for a proposed wake word; error means it can't be used."""
+    w = (word or "").strip().lower()
+    if not w:
+        return "Type a word.", None
+    if " " in w or not w.isalpha():
+        return "Use a single word with letters only (Tiger listens for one word).", None
+    if w in reserved_words():
+        return f"\"{w}\" is part of Tiger's commands, so it would get mixed up.", None
+    if w in COMMON_WORDS:
+        return None, f"\"{w}\" comes up a lot in normal talk, so Tiger may wake by accident."
+    if len(w) < 4:
+        return None, "Very short words are easy to say or hear by accident."
+    return None, None
+
+
 def voice_words(names):
     """{'linda': 'Linda', 'mark': 'Mark', ...} from voice names like those in Tiger Settings.
 
     Only the first word of each name is listened for; names that clash with command words
     (a voice called "Driver", say) are skipped so they can't steal a command.
     """
-    reserved = set(FILLERS) | set(CLUB_LOOKUP) | NUMBER_WORDS | LITTLE | LOTS | \
-        {w for phrases, _ in HOTKEY_INTENTS for p in phrases for w in p.split()} | \
-        {w for c in CLUB_LOOKUP for w in c.split()} | VOICE_CUES | TALK_WORDS
+    reserved = reserved_words()
     out = {}
     for name in names:
         word = "".join(ch for ch in name.split()[0].lower() if ch.isalpha() or ch == "'") \

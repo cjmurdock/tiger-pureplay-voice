@@ -660,6 +660,21 @@ class SettingsWindow:
         self.conf_label = ttk.Label(conf, width=6)
         self.conf_label.pack(side="left", padx=(10, 0))
         self.conf_label.configure(text=f"{self.conf_var.get():.2f}")
+
+        ttk.Separator(tab).pack(fill="x", pady=16)
+        ttk.Label(tab, text="Wake word", style="Big.TLabel").pack(anchor="w")
+        ttk.Label(tab, text="The word you say before every command. Pick one you won't say by "
+                            "accident, ideally two or three syllables, and not a golf word you'd use when "
+                            "talking (for example jarvis or jeeves). Tiger restarts to use it.",
+                  style="Hint.TLabel", wraplength=640).pack(anchor="w", pady=(2, 6))
+        wrow = ttk.Frame(tab)
+        wrow.pack(fill="x")
+        self.wake_var = tk.StringVar(value=self.cfg.get("wake_word", "tiger"))
+        ttk.Entry(wrow, textvariable=self.wake_var, width=20).pack(side="left")
+        self.wake_btn = ttk.Button(wrow, text="Check and use", command=self.change_wake_word)
+        self.wake_btn.pack(side="left", padx=(8, 0))
+        self.wake_msg = ttk.Label(wrow, style="Hint.TLabel", wraplength=420)
+        self.wake_msg.pack(side="left", padx=(10, 0))
         self.load_mics()
 
     def load_mics(self):
@@ -741,6 +756,59 @@ class SettingsWindow:
             self.saved_label.configure(text="Pick a microphone that's plugged in.")
             return
         self.save({"mic.device": name}, f"{name or 'Windows default microphone'} saved")
+
+    def change_wake_word(self):
+        from .commands import check_wake_word
+        from .speech_check import word_known
+        word = self.wake_var.get().strip().lower()
+        if word == (self.cfg.get("wake_word") or "tiger"):
+            self.wake_msg.configure(text=f"\"{word}\" is already the wake word.", style="Hint.TLabel")
+            return
+        error, warning = check_wake_word(word)
+        if error:
+            self.wake_msg.configure(text=error, style="Bad.TLabel")
+            return
+        if warning and not messagebox.askyesno("Wake word", f"{warning}\n\nUse \"{word}\" anyway?"):
+            return
+        self.wake_btn.state(["disabled"])
+        self.wake_msg.configure(text="Checking the speech model knows that word...", style="Hint.TLabel")
+        base, cfg = self.base_dir, dict(self.cfg)
+
+        def work():
+            known = word_known(base, cfg, word)
+            if known is False:
+                return "unknown"
+            self._ui.put(lambda: self.wake_msg.configure(text="Saving..."))
+            restart = tiger_is_running(base)
+            if restart:
+                config_store.send_request(base, "quit")
+                for _ in range(40):
+                    time.sleep(0.5)
+                    if not tiger_is_running(base):
+                        break
+            return ("saved", restart, known)
+
+        def done(result):
+            self.wake_btn.state(["!disabled"])
+            if isinstance(result, Exception):
+                self.wake_msg.configure(text=f"Couldn't change it: {result}", style="Bad.TLabel")
+                return
+            if result == "unknown":
+                self.wake_msg.configure(text=f"The speech model doesn't know \"{word}\", so Tiger "
+                                             "couldn't hear it. Try another word.", style="Bad.TLabel")
+                return
+            _, restarted, known = result
+            if not self.save({"wake_word": word}, f"Wake word is now \"{word}\""):
+                return
+            if restarted:
+                self._launch_tiger()
+                self.saved_label.configure(text=f"Wake word is now \"{word}\". Tiger has been restarted.")
+            note = "" if known else " (Couldn't check the speech model, so test it.)"
+            self.wake_msg.configure(
+                text=(f"Done. Tiger restarted: say \"{word}, seven iron\"." if restarted else
+                      f"Done. Say \"{word}\" the next time Tiger starts.") + note,
+                style="Good.TLabel")
+        self.run_in_background(work, done)
 
     def on_conf(self):
         val = round(self.conf_var.get(), 2)

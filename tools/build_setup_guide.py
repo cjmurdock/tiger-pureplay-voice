@@ -143,7 +143,8 @@ def story():
         "faster\u201d or \u201cTiger, speak up\u201d.",
         "<b>Microphone</b>: the mic Tiger listens on, a live level meter, and how sure Tiger must be "
         "before acting. Move that slider toward Strict if Tiger acts on things you didn't say, or toward "
-        "Relaxed if it ignores you.",
+        "Relaxed if it ignores you. You can also change the <b>wake word</b> from \u201cTiger\u201d to "
+        "another word here (one you won't say by accident, like jarvis); Tiger restarts to use it.",
         "<b>Distances</b>: a backup carry for each club. When club suggestion is on in Pureplay, Tiger "
         "uses Pureplay's suggested club from the player's own bag instead. These numbers are used when "
         "suggestion is off, or for \u201cwhat should I hit from one fifty\u201d when that isn't your "

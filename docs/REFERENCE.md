@@ -86,7 +86,10 @@ Say **"Tiger, open settings"**, or double-click **Tiger Settings.bat** (or run
   see *Azure voices* below). Double-click or press **Preview** to hear one with the line in the box,
   then **Use this voice**. **Speed** and **Volume** save as you move them.
 - **Microphone:** pick the mic, talk and watch the level bar, then **Use this microphone**. The
-  slider below it is `min_confidence`.
+  slider below it is `min_confidence`. **Wake word:** type a new one and press **Check and use**.
+  It must be one word, not a word Tiger's commands use, and known to the speech model (checked);
+  common or golf words ("hey", "caddie") get a warning because they come up in normal talk. A
+  running Tiger is restarted so the new word works straight away (`wake_word` in config.json).
 - **Distances:** backup carry for each club (`carry_yards`), used only when Pureplay's club
   suggestion is off or you ask about a distance other than the one you have. Blank means the club
   isn't in your bag.
@@ -102,7 +105,7 @@ Say **"Tiger, open settings"**, or double-click **Tiger Settings.bat** (or run
 
 Everything is saved to config.json straight away, changing only that setting, with the previous file
 kept as `config.backup.json`. A running Tiger checks config.json every second and uses the new voice
-or mic without restarting (the wake word still needs a restart). If config.json has a typo, Tiger
+or mic without restarting (the wake word needs a restart, which the Microphone tab does for you). If config.json has a typo, Tiger
 keeps its last good settings and the window shows where the mistake is.
 
 ## Azure voices
